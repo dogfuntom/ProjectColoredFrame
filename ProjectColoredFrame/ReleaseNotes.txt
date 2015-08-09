@@ -1,0 +1,7 @@
+﻿== 0.5 (09.08.15) ==
+
+* Initial Release.
+
+== 0.6 (09.08.15) ==
+
+* Fixed default opacity value being not set resulting in zero opacity by default.
