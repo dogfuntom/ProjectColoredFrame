@@ -4,6 +4,8 @@
 		<Identity Id="ProjectColoredFrame.MaximKamalov.ba220bb9-25b4-4dd7-969b-4968b29a3341" Version="0.6" Language="en-US" Publisher="Maxim Kamalov" />
 		<DisplayName>ProjectColoredFrame</DisplayName>
 		<Description xml:space="preserve">Helps you to differentiate between editing documents belonging to different projects by adding a faintly colored border.</Description>
+		<MoreInfo>https://visualstudiogallery.msdn.microsoft.com/6eb7179c-968d-4076-a74a-81251822dfa4</MoreInfo>
+		<License>LICENSE.txt</License>
 		<ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
 		<Tags>text editor, border, frame, code, project, color, document</Tags>
 	</Metadata>
