@@ -8,6 +8,7 @@
     using EnvDTE;
     using EnvDTE80;
     using Microsoft.VisualStudio.Shell;
+    using static System.Diagnostics.Debug;
 
     internal static class ColorChooser
     {
@@ -23,25 +24,34 @@
 
         private static Dictionary<string, int> mapping = new Dictionary<string, int>();
 
-        private static bool initialized = false;
+        //private static bool initialized = false;
+        private static Solution initializedForSolution = null;
 
         public static Color GetColorFor(string fileName)
         {
-            var dte = (DTE2)Package.GetGlobalService(typeof(DTE));
-            var solution = dte.Solution;
-            var prjItem = solution.FindProjectItem(fileName);
-            var project = prjItem.ContainingProject;
+            Assert(!string.IsNullOrWhiteSpace(fileName));
 
-            if (!initialized)
+            var dte = Package.GetGlobalService(typeof(DTE)) as DTE2;
+            var solution = dte?.Solution;
+            var prjItem = solution?.FindProjectItem(fileName);
+            var project = prjItem?.ContainingProject;
+
+            var notFound = project == null;
+            if (notFound)
+                return Colors.Transparent;
+
+            var needReinitialization = solution != initializedForSolution;
+            if (needReinitialization)
             {
+                mapping.Clear();
                 foreach (Project pr in solution.Projects)
                 {
                     GetColorFor(pr);
                 }
-                initialized = true;
+                initializedForSolution = solution;
             }
 
-            return project != null ? GetColorFor(project) : Colors.Transparent;
+            return GetColorFor(project);
         }
 
         private static Color GetColorFor(Project project)

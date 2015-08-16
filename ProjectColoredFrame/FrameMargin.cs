@@ -45,7 +45,9 @@ namespace ProjectColoredFrame
             if (!textView.TextDataModel.DocumentBuffer.Properties.TryGetProperty(typeof(ITextDocument), out document))
                 return;
 
-            var color = ColorChooser.GetColorFor(document.FilePath);
+            var color = !string.IsNullOrWhiteSpace(document?.FilePath)
+                ? ColorChooser.GetColorFor(document.FilePath)
+                : Colors.Transparent;
             var borderColor = color;
             borderColor.A = opacity;
             var borderBrush = new SolidColorBrush(borderColor);
