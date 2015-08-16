@@ -1,11 +1,15 @@
-﻿== 0.5 (09.08.15) ==
+﻿== 0.8 (16.08.15) ==
 
-* Initial Release.
-
-== 0.6 (09.08.15) ==
-
-* Fixed default opacity value being not set resulting in zero opacity by default.
+Fixed reported bug.
 
 == 0.7 (13.08.15) ==
 
-* Opened source code.
+Opened source code.
+
+== 0.6 (09.08.15) ==
+
+Fixed default opacity value being not set resulting in zero opacity by default.
+
+== 0.5 (09.08.15) ==
+
+Initial Release.
