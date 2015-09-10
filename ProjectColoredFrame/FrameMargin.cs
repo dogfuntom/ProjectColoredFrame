@@ -39,7 +39,8 @@ namespace ProjectColoredFrame
         /// <param name="textView">The <see cref="IWpfTextView"/> to attach the margin to.</param>
         public FrameMargin(IWpfTextView textView, bool vertical = false)
         {
-            byte opacity = GetOpacity();
+            byte opacity, thickness;
+            GetOptionValues(out opacity, out thickness);
 
             ITextDocument document;
             if (!textView.TextDataModel.DocumentBuffer.Properties.TryGetProperty(typeof(ITextDocument), out document))
@@ -53,38 +54,48 @@ namespace ProjectColoredFrame
             var borderBrush = new SolidColorBrush(borderColor);
             borderBrush.Freeze();
 
-            this.MinHeight = this.MinWidth = 2;
+            this.MinHeight = this.MinWidth = thickness;
 
             if (vertical)
             {
-                this.Width = 2;
+                this.Width = thickness;
                 EventHandler handler = (sender, e) => { this.Height = textView.ViewportHeight * (textView.ZoomLevel / 100); };
                 textView.ViewportHeightChanged += handler;
                 textView.ZoomLevelChanged += (sender, e) => handler(sender, e);
             }
             else
-                this.Height = 2;
+                this.Height = thickness;
 
             this.ClipToBounds = true;
             this.Background = borderBrush;
 
             this.isVertical = vertical;
 
-            Global.SettingsChanged += (sender, e) =>
-            {
-                var col = ((SolidColorBrush)this.Background).Color;
-                col.A = GetOpacity();
-                this.Background = new SolidColorBrush(col);
-            };
+            Global.SettingsChanged += HandleSettingsChanged;
         }
 
-        private static byte GetOpacity()
+        private void HandleSettingsChanged(object sender, EventArgs e)
+        {
+            byte opacity, thickness;
+            GetOptionValues(out opacity, out thickness);
+
+            var col = ((SolidColorBrush)this.Background).Color;
+            col.A = opacity;
+            this.Background = new SolidColorBrush(col);
+
+            if (this.isVertical)
+                this.Width = thickness;
+            else
+                this.Height = thickness;
+        }
+
+        private static void GetOptionValues(out byte opacity, out byte thickness)
         {
             var dte = (DTE2)Package.GetGlobalService(typeof(DTE));
             var props = dte.Properties[Global.Name, Global.OptionsPageName];
 
-            var opacity = (byte)props.Item("Opacity").Value;
-            return opacity;
+            opacity = (byte)props.Item("Opacity").Value;
+            thickness = (byte)props.Item("Thickness").Value;
         }
 
         #region IWpfTextViewMargin

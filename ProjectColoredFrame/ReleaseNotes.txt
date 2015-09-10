@@ -1,4 +1,8 @@
-﻿== 0.8 (16.08.15) ==
+﻿== 0.9 (30.08.15) ==
+
+Added option to change thickness of border.
+
+== 0.8 (16.08.15) ==
 
 Fixed reported bug.
 
