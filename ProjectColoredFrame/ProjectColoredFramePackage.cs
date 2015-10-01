@@ -61,6 +61,8 @@ namespace ProjectColoredFrame
         /// </summary>
         protected override void Initialize()
         {
+            var grid = (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
+            Debug.Write(grid.Opacity);
             base.Initialize();
         }
 

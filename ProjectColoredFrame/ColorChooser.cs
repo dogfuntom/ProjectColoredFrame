@@ -12,8 +12,7 @@
 
     internal static class ColorChooser
     {
-        private static Color[] predefined = new Color[]
-        {
+        private static Color[] predefined = {
             (Color)ColorConverter.ConvertFromString("#FFE51400"), // red
             (Color)ColorConverter.ConvertFromString("#FF60A917"), // green
             (Color)ColorConverter.ConvertFromString("#FFE3C800"), // yellow
@@ -22,10 +21,46 @@
             (Color)ColorConverter.ConvertFromString("#FF00ABA9"), // teal
         };
 
+        private static Lazy<Color[]> palette = new Lazy<Color[]>(LoadPalette, isThreadSafe:true);
+
         private static Dictionary<string, int> mapping = new Dictionary<string, int>();
 
         //private static bool initialized = false;
         private static Solution initializedForSolution = null;
+
+        private static Color[] Palette
+        {
+            get
+            {
+                return palette.Value;
+            }
+        }
+
+        private static Color[] LoadPalette()
+        {
+            // TODO: probably can be done in one way, either through Properties or OptionsGrid
+
+            var props = Global.GetProperties();
+
+            var replace = (bool)props.Item("ReplaceDefaultPalette").Value;
+
+            var options = new ProjectColoredFrameOptionsGrid();
+            options.LoadSettingsFromStorage();
+            //var replace = options.ReplaceDefaultPalette;
+            var customPalette = options.CustomColors;
+
+            var result = new List<Color>(predefined.Length);
+            if ((!replace) || customPalette.IsNullOrEmpty())
+                result.AddRange(predefined);
+
+            // convert System.Drawing.Color to System.Windows.Media.Color
+            var converterFromDrawing = new System.Drawing.ColorConverter();
+            var toAdd = from c in customPalette
+                        select (Color)ColorConverter.ConvertFromString(converterFromDrawing.ConvertToString(c));
+            result.AddRange(toAdd);
+
+            return result.ToArray();
+        }
 
         public static Color GetColorFor(string fileName)
         {
@@ -61,18 +96,18 @@
 
             int index;
             if (mapping.TryGetValue(uniqueName, out index))
-                return predefined[index];
+                return Palette[index];
 
             var random = new Random(hash);
 
             for (int guard = 0; guard < 64; guard++)
             {
-                index = random.Next(predefined.Length);
+                index = random.Next(Palette.Length);
                 if (!mapping.Values.Contains(index))
                     break;
             }
             mapping.Add(uniqueName, index);
-            return predefined[index];
+            return Palette[index];
         }
     }
 }

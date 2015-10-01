@@ -91,8 +91,7 @@ namespace ProjectColoredFrame
 
         private static void GetOptionValues(out byte opacity, out byte thickness)
         {
-            var dte = (DTE2)Package.GetGlobalService(typeof(DTE));
-            var props = dte.Properties[Global.Name, Global.OptionsPageName];
+            var props = Global.GetProperties();
 
             opacity = (byte)props.Item("Opacity").Value;
             thickness = (byte)props.Item("Thickness").Value;
