@@ -32,7 +32,9 @@ namespace ProjectColoredFrame
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(ProjectColoredFramePackageGuids.PackageGuidString)]
-    [ProvideOptionPage(typeof(ProjectColoredFrameOptionsGrid), Global.Name, Global.OptionsPageName, 110, 116, true)]
+    [ProvideOptionPage(typeof(ProjectColoredFrameOptionsGrid), Global.Name, Global.OptionsPageName, 106, 107, true)]
+    [ProvideProfileAttribute(typeof(ProjectColoredFrameOptionsGrid),
+    Global.Name, Global.OptionsPageName, 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
     public sealed class ProjectColoredFramePackage : Package
     {
         private static ProjectColoredFramePackage current;
@@ -89,6 +91,9 @@ namespace ProjectColoredFrame
             serviceContainer.AddService(typeof(SettingsChangedEventDispatcher), new SettingsChangedEventDispatcher());
 
             current = this.GetService(typeof(Package)) as ProjectColoredFramePackage;
+
+            // Ensure LoadSettingsFromStorage is called (it won't be called automatically due to bug in VS).
+            //Current.OptionsGrid.LoadSettingsFromStorage();
         }
     }
 }

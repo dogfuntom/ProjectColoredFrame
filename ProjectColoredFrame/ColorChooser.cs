@@ -88,19 +88,29 @@
         {
             var options = ProjectColoredFramePackage.Current.OptionsGrid;
             var replace = options.ReplaceDefaultPalette;
-            var customPalette = options.CustomColors;
+            System.Drawing.Color[] customPalette = options.CustomColors;
 
             var result = new List<Color>(predefined.Length);
             if ((!replace) || customPalette.IsNullOrEmpty())
                 result.AddRange(predefined);
 
             // convert System.Drawing.Color to System.Windows.Media.Color
-            var converterFromDrawing = new System.Drawing.ColorConverter();
             var toAdd = from c in customPalette
-                        select (Color)ColorConverter.ConvertFromString(converterFromDrawing.ConvertToString(c));
+                        select DrawingColorToMediaColor(c);
             result.AddRange(toAdd);
 
             return result.ToArray();
+        }
+
+        private static Color DrawingColorToMediaColor(System.Drawing.Color source)
+        {
+            return new Color
+            {
+                A = source.A,
+                B = source.B,
+                G = source.G,
+                R = source.R
+            };
         }
     }
 }

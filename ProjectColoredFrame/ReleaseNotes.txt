@@ -1,4 +1,12 @@
-﻿== 0.9 (30.08.15) ==
+﻿== 0.9.1 (17.12.16) ==
+
+Migrated to VS 2017 RC.
+Added options to extend or replace the palette with your own colors.
+Refactored the codebase
+(not directly visible, but it's open-source project, so you can see it yourself in the repository).
+Increased default opacity (will affect new installations only).
+
+== 0.9 (30.08.15) ==
 
 Added option to change thickness of border.
 

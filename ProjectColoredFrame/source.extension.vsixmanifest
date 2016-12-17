@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="ProjectColoredFrame.MaximKamalov.ba220bb9-25b4-4dd7-969b-4968b29a3341" Version="0.9" Language="en-US" Publisher="Maxim Kamalov" />
+    <Identity Id="ProjectColoredFrame.MaximKamalov.ba220bb9-25b4-4dd7-969b-4968b29a3341" Version="0.9.1" Language="en-US" Publisher="Maxim Kamalov" />
     <DisplayName>ProjectColoredFrame</DisplayName>
     <Description xml:space="preserve">Helps you to differentiate between editing documents belonging to different projects by adding a thin faintly colored border.</Description>
     <MoreInfo>https://visualstudiogallery.msdn.microsoft.com/6eb7179c-968d-4076-a74a-81251822dfa4</MoreInfo>
