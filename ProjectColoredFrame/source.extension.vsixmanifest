@@ -11,10 +11,10 @@
     <Tags>text editor, border, frame, code, project, color, document, productivity, editor</Tags>
   </Metadata>
   <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[13.0, 14.0]" />
-    <InstallationTarget Version="[13.0, 14.0]" Id="Microsoft.VisualStudio.IntegratedShell" />
-    <InstallationTarget Version="[13.0, 14.0]" Id="Microsoft.VisualStudio.Community" />
-    <InstallationTarget Version="[13.0, 14.0]" Id="Microsoft.VisualStudio.Enterprise" />
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0, 16.0)" />
+    <InstallationTarget Version="[12.0, 16.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
+    <InstallationTarget Version="[14.0, 16.0)" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[14.0, 16.0)" Id="Microsoft.VisualStudio.Enterprise" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -24,4 +24,7 @@
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
   </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25904.2,16.0)" DisplayName="Visual Studio core editor" />
+  </Prerequisites>
 </PackageManifest>

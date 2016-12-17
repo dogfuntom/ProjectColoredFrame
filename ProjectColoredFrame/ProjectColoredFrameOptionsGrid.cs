@@ -10,14 +10,13 @@
     using Microsoft.VisualStudio.Settings;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Settings;
-    using static Global;
 
     [ClassInterface(ClassInterfaceType.AutoDual)]
-    [CLSCompliant(false), ComVisible(true)]
+    [ComVisible(true)]
     [Guid(ProjectColoredFramePackageGuids.PackageGuidString)]
     public class ProjectColoredFrameOptionsGrid : DialogPage
     {
-        private const string CollectionName = @"ProjectColoredFrame";
+        private const string CollectionName = Global.Name;
 
         private const string OpacityAndThicknessCategory = @"Opacity & thickness";
         private const string CustomPaletteCategory = @"Custom palette";
@@ -63,7 +62,7 @@
         protected override void OnApply(PageApplyEventArgs e)
         {
             base.OnApply(e);
-            RaiseSettingsChanged(this);
+            Global.Package.SettingsChangedEventDispatcher.RaiseSettingsChanged(this);
         }
 
         public override void SaveSettingsToStorage()

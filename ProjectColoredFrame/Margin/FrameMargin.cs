@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="FrameMargin.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -71,7 +65,15 @@ namespace ProjectColoredFrame
 
             this.isVertical = vertical;
 
-            Global.SettingsChanged += HandleSettingsChanged;
+            Global.Package.SettingsChangedEventDispatcher.SettingsChanged += HandleSettingsChanged;
+        }
+
+        private static void GetOptionValues(out byte opacity, out byte thickness)
+        {
+            var props = Global.GetProperties();
+
+            opacity = (byte)props.Item("Opacity").Value;
+            thickness = (byte)props.Item("Thickness").Value;
         }
 
         private void HandleSettingsChanged(object sender, EventArgs e)
@@ -87,14 +89,6 @@ namespace ProjectColoredFrame
                 this.Width = thickness;
             else
                 this.Height = thickness;
-        }
-
-        private static void GetOptionValues(out byte opacity, out byte thickness)
-        {
-            var props = Global.GetProperties();
-
-            opacity = (byte)props.Item("Opacity").Value;
-            thickness = (byte)props.Item("Thickness").Value;
         }
 
         #region IWpfTextViewMargin
@@ -114,9 +108,25 @@ namespace ProjectColoredFrame
             }
         }
 
+
         #endregion
 
         #region ITextViewMargin
+
+        /// <summary>
+        /// Gets a value indicating whether the margin is enabled.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The margin is disposed.</exception>
+        public bool Enabled
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+
+                // The margin should always be enabled
+                return true;
+            }
+        }
 
         /// <summary>
         /// Gets the size of the margin.
@@ -139,19 +149,15 @@ namespace ProjectColoredFrame
                 return this.ActualHeight;
             }
         }
-
         /// <summary>
-        /// Gets a value indicating whether the margin is enabled.
+        /// Disposes an instance of <see cref="FrameMargin"/> class.
         /// </summary>
-        /// <exception cref="ObjectDisposedException">The margin is disposed.</exception>
-        public bool Enabled
+        public void Dispose()
         {
-            get
+            if (!this.isDisposed)
             {
-                this.ThrowIfDisposed();
-
-                // The margin should always be enabled
-                return true;
+                GC.SuppressFinalize(this);
+                this.isDisposed = true;
             }
         }
 
@@ -169,19 +175,6 @@ namespace ProjectColoredFrame
         {
             return string.Equals(marginName, MarginName, StringComparison.OrdinalIgnoreCase) ? this : null;
         }
-
-        /// <summary>
-        /// Disposes an instance of <see cref="FrameMargin"/> class.
-        /// </summary>
-        public void Dispose()
-        {
-            if (!this.isDisposed)
-            {
-                GC.SuppressFinalize(this);
-                this.isDisposed = true;
-            }
-        }
-
         #endregion
 
         /// <summary>

@@ -1,10 +1,4 @@
-﻿//------------------------------------------------------------------------------
-// <copyright file="ProjectColoredFramePackage.cs" company="Company">
-//     Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
-
-using System;
+﻿using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -38,10 +32,11 @@ namespace ProjectColoredFrame
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(ProjectColoredFramePackageGuids.PackageGuidString)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideOptionPage(typeof(ProjectColoredFrameOptionsGrid), Global.Name, Global.OptionsPageName, 110, 116, true)]
     public sealed class ProjectColoredFramePackage : Package
     {
+        private static ProjectColoredFramePackage current;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectColoredFramePackage"/> class.
         /// </summary>
@@ -51,9 +46,34 @@ namespace ProjectColoredFrame
             // any Visual Studio service because at this point the package object is created but
             // not sited yet inside Visual Studio environment. The place to do all the other
             // initialization is the Initialize method.
+            current = this;
         }
 
-        #region Package Members
+        internal static ProjectColoredFramePackage Current
+        {
+            get
+            {
+                // Can't be too cautious.
+                current = current.GetService(typeof(Package)) as ProjectColoredFramePackage ?? current;
+                return current;
+            }
+        }
+
+        internal ProjectColoredFrameOptionsGrid OptionsGrid
+        {
+            get
+            {
+                return (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
+            }
+        }
+
+        internal SettingsChangedEventDispatcher SettingsChangedEventDispatcher
+        {
+            get
+            {
+                return (SettingsChangedEventDispatcher)this.GetService(typeof(SettingsChangedEventDispatcher));
+            }
+        }
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -64,8 +84,11 @@ namespace ProjectColoredFrame
             var grid = (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
             Debug.Write(grid.Opacity);
             base.Initialize();
-        }
 
-        #endregion
+            var serviceContainer = (IServiceContainer)this.GetService(typeof(IServiceContainer));
+            serviceContainer.AddService(typeof(SettingsChangedEventDispatcher), new SettingsChangedEventDispatcher());
+
+            current = this.GetService(typeof(Package)) as ProjectColoredFramePackage;
+        }
     }
 }
