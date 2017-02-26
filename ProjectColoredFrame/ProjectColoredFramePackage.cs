@@ -1,17 +1,14 @@
-﻿using System;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
-
-namespace ProjectColoredFrame
+﻿namespace ProjectColoredFrame
 {
+    using System;
+    using System.Diagnostics;
+    using System.Runtime.InteropServices;
+    using EnvDTE;
+    using EnvDTE80;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using ProjectColoredFrame.Core;
+
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
     /// </summary>
@@ -33,12 +30,11 @@ namespace ProjectColoredFrame
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [Guid(ProjectColoredFramePackageGuids.PackageGuidString)]
     [ProvideOptionPage(typeof(ProjectColoredFrameOptionsGrid), Global.Name, Global.OptionsPageName, 106, 107, true)]
-    [ProvideProfileAttribute(typeof(ProjectColoredFrameOptionsGrid),
-    Global.Name, Global.OptionsPageName, 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
+    [ProvideProfile(typeof(ProjectColoredFrameOptionsGrid),
+        Global.Name, Global.OptionsPageName, 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects)]
     public sealed class ProjectColoredFramePackage : Package
     {
-        private static ProjectColoredFramePackage current;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectColoredFramePackage"/> class.
         /// </summary>
@@ -48,34 +44,16 @@ namespace ProjectColoredFrame
             // any Visual Studio service because at this point the package object is created but
             // not sited yet inside Visual Studio environment. The place to do all the other
             // initialization is the Initialize method.
-            current = this;
+            Current = this;
         }
 
-        internal static ProjectColoredFramePackage Current
-        {
-            get
-            {
-                // Can't be too cautious.
-                current = current.GetService(typeof(Package)) as ProjectColoredFramePackage ?? current;
-                return current;
-            }
-        }
+        internal static ProjectColoredFramePackage Current { get; private set; }
 
-        internal ProjectColoredFrameOptionsGrid OptionsGrid
-        {
-            get
-            {
-                return (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
-            }
-        }
+        internal bool IsInitialized { get; private set; }
 
-        internal SettingsChangedEventDispatcher SettingsChangedEventDispatcher
-        {
-            get
-            {
-                return (SettingsChangedEventDispatcher)this.GetService(typeof(SettingsChangedEventDispatcher));
-            }
-        }
+        internal ProjectColoredFrameOptionsGrid OptionsGrid => (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
+
+        internal Services Services { get; private set; }
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -83,17 +61,13 @@ namespace ProjectColoredFrame
         /// </summary>
         protected override void Initialize()
         {
-            var grid = (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
-            Debug.Write(grid.Opacity);
+            //var grid = (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
             base.Initialize();
 
-            var serviceContainer = (IServiceContainer)this.GetService(typeof(IServiceContainer));
-            serviceContainer.AddService(typeof(SettingsChangedEventDispatcher), new SettingsChangedEventDispatcher());
+            Current = this;
 
-            current = this.GetService(typeof(Package)) as ProjectColoredFramePackage;
-
-            // Ensure LoadSettingsFromStorage is called (it won't be called automatically due to bug in VS).
-            //Current.OptionsGrid.LoadSettingsFromStorage();
+            this.Services = new Services((DTE2)this.GetService(typeof(DTE)));
+            this.IsInitialized = true;
         }
     }
 }

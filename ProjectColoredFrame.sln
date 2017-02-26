@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.25928.0
+VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectColoredFrame", "ProjectColoredFrame\ProjectColoredFrame.csproj", "{72C8E3B5-7658-4958-92A8-6A95A4952118}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectColoredFrame.VisualTest", "ProjectColoredFrame.VisualTest\ProjectColoredFrame.VisualTest.csproj", "{862FF894-B537-4A0B-A45F-3C864F2ADE3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{72C8E3B5-7658-4958-92A8-6A95A4952118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72C8E3B5-7658-4958-92A8-6A95A4952118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72C8E3B5-7658-4958-92A8-6A95A4952118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862FF894-B537-4A0B-A45F-3C864F2ADE3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862FF894-B537-4A0B-A45F-3C864F2ADE3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862FF894-B537-4A0B-A45F-3C864F2ADE3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862FF894-B537-4A0B-A45F-3C864F2ADE3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

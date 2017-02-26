@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Utilities;
-
-namespace ProjectColoredFrame
+﻿namespace ProjectColoredFrame
 {
+    using System.ComponentModel.Composition;
+    using Microsoft.VisualStudio.Text.Editor;
+    using Microsoft.VisualStudio.Utilities;
+
     /// <summary>
     /// Export a <see cref="IWpfTextViewMarginProvider"/>, which returns an instance of the margin for the editor to use.
     /// </summary>
@@ -15,8 +15,6 @@ namespace ProjectColoredFrame
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryBottom : IWpfTextViewMarginProvider
     {
-        #region IWpfTextViewMarginProvider
-
         /// <summary>
         /// Creates an <see cref="IWpfTextViewMargin"/> for the given <see cref="IWpfTextViewHost"/>.
         /// </summary>
@@ -26,11 +24,9 @@ namespace ProjectColoredFrame
         /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
-        {
-            return new FrameMargin(wpfTextViewHost.TextView);
-        }
-
-        #endregion
+            => Global.IsPackageInitialized
+                ? new FrameMargin(wpfTextViewHost.TextView)
+                : null;
     }
 
     /// <summary>
@@ -43,8 +39,6 @@ namespace ProjectColoredFrame
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryTop : IWpfTextViewMarginProvider
     {
-        #region IWpfTextViewMarginProvider
-
         /// <summary>
         /// Creates an <see cref="IWpfTextViewMargin"/> for the given <see cref="IWpfTextViewHost"/>.
         /// </summary>
@@ -54,11 +48,9 @@ namespace ProjectColoredFrame
         /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
-        {
-            return new FrameMargin(wpfTextViewHost.TextView, vertical: false);
-        }
-
-        #endregion
+            => Global.IsPackageInitialized
+                ? new FrameMargin(wpfTextViewHost.TextView, vertical: false)
+                : null;
     }
 
     /// <summary>
@@ -72,8 +64,6 @@ namespace ProjectColoredFrame
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryLeft : IWpfTextViewMarginProvider
     {
-        #region IWpfTextViewMarginProvider
-
         /// <summary>
         /// Creates an <see cref="IWpfTextViewMargin"/> for the given <see cref="IWpfTextViewHost"/>.
         /// </summary>
@@ -84,11 +74,12 @@ namespace ProjectColoredFrame
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
         {
+            if (!Global.IsPackageInitialized)
+                return null;
+
             var height = wpfTextViewHost.HostControl.Height;
             return new FrameMargin(wpfTextViewHost.TextView, vertical: true);
         }
-
-        #endregion
     }
 
     /// <summary>
@@ -102,8 +93,6 @@ namespace ProjectColoredFrame
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryRight : IWpfTextViewMarginProvider
     {
-        #region IWpfTextViewMarginProvider
-
         /// <summary>
         /// Creates an <see cref="IWpfTextViewMargin"/> for the given <see cref="IWpfTextViewHost"/>.
         /// </summary>
@@ -113,10 +102,8 @@ namespace ProjectColoredFrame
         /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
-        {
-            return new FrameMargin(wpfTextViewHost.TextView, vertical: true);
-        }
-
-        #endregion
+            => Global.IsPackageInitialized
+                ? new FrameMargin(wpfTextViewHost.TextView, vertical: true)
+                : null;
     }
 }

@@ -67,7 +67,7 @@
         protected override void OnApply(PageApplyEventArgs e)
         {
             base.OnApply(e);
-            Global.Package.SettingsChangedEventDispatcher.RaiseSettingsChanged(this);
+            Global.Services.SettingsChangedEventDispatcher.RaiseSettingsChanged(this);
         }
 
         public override void SaveSettingsToStorage()
@@ -75,20 +75,8 @@
             base.SaveSettingsToStorage();
 
             var userSettingsStore = GetUserSettingsStore();
-            if (!userSettingsStore.CollectionExists(FullCollectionName))
-                userSettingsStore.CreateCollection(FullCollectionName);
-
-            //var converter = new ColorConverter();
-            //var convertedColors = new List<string>();
-            //foreach (var color in this.CustomColors)
-            //{
-            //    convertedColors.Add(converter.ConvertToString(color));
-            //}
-
-            //userSettingsStore.SetString(
-            //    CollectionName,
-            //    CustomColorsPropertyName,
-            //    string.Join(Separator, convertedColors));
+            if (!userSettingsStore.CollectionExists(this.FullCollectionName))
+                userSettingsStore.CreateCollection(this.FullCollectionName);
 
             using (var stream = new MemoryStream(4))
             {
@@ -102,7 +90,7 @@
 
                 stream.Seek(0, SeekOrigin.Begin);
 
-                userSettingsStore.SetMemoryStream(FullCollectionName, CustomColorsPropertyName, stream);
+                userSettingsStore.SetMemoryStream(this.FullCollectionName, CustomColorsPropertyName, stream);
             }
         }
 
@@ -111,24 +99,10 @@
             base.LoadSettingsFromStorage();
 
             var userSettingsStore = GetUserSettingsStore();
-            if (!userSettingsStore.CollectionExists(FullCollectionName))
+            if (!userSettingsStore.CollectionExists(this.FullCollectionName))
                 return;
 
-            //var colorsString = userSettingsStore.GetString(
-            //    CollectionName,
-            //    CustomColorsPropertyName,
-            //    string.Empty);
-
-            //var converter = new ColorConverter();
-            //var colors = new List<Color>();
-            //foreach (var colorString in colorsString.Split(new[] { Separator }, StringSplitOptions.RemoveEmptyEntries))
-            //{
-            //    colors.Add((Color)converter.ConvertFromString(colorString));
-            //}
-
-            //this.CustomColors = colors.ToArray();
-
-            using (var stream = userSettingsStore.GetMemoryStream(FullCollectionName, CustomColorsPropertyName))
+            using (var stream = userSettingsStore.GetMemoryStream(this.FullCollectionName, CustomColorsPropertyName))
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 var length = (int)(stream.Length / 4);

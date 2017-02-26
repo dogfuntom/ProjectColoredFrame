@@ -33,21 +33,19 @@ namespace ProjectColoredFrame
         /// <param name="textView">The <see cref="IWpfTextView"/> to attach the margin to.</param>
         public FrameMargin(IWpfTextView textView, bool vertical = false)
         {
-            byte opacity, thickness;
-            GetOptionValues(out opacity, out thickness);
-
-            ITextDocument document;
-            if (!textView.TextDataModel.DocumentBuffer.Properties.TryGetProperty(typeof(ITextDocument), out document))
+            // Check if not a text document, just in case.
+            if (!textView.TextDataModel.DocumentBuffer.Properties.TryGetProperty(typeof(ITextDocument), out ITextDocument document))
                 return;
 
-            var color = !string.IsNullOrWhiteSpace(document?.FilePath)
-                ? ColorChooser.GetColorFor(document.FilePath)
-                : Colors.Transparent;
-            var borderColor = color;
-            borderColor.A = opacity;
+            var props = new FrameMarginProperties(document?.FilePath);
+            props.Update();
+
+            var borderColor = props.Color;
+            borderColor.A = props.Opacity;
             var borderBrush = new SolidColorBrush(borderColor);
             borderBrush.Freeze();
 
+            var thickness = props.Thickness;
             this.MinHeight = this.MinWidth = thickness;
 
             if (vertical)
@@ -65,21 +63,14 @@ namespace ProjectColoredFrame
 
             this.isVertical = vertical;
 
-            Global.Package.SettingsChangedEventDispatcher.SettingsChanged += HandleSettingsChanged;
-        }
-
-        private static void GetOptionValues(out byte opacity, out byte thickness)
-        {
-            var props = Global.GetProperties();
-
-            opacity = (byte)props.Item("Opacity").Value;
-            thickness = (byte)props.Item("Thickness").Value;
+            // TODO: Watch for solution change too.
+            Global.Services.SettingsChangedEventDispatcher.SettingsChanged += this.HandleSettingsChanged;
         }
 
         private void HandleSettingsChanged(object sender, EventArgs e)
         {
-            byte opacity, thickness;
-            GetOptionValues(out opacity, out thickness);
+            var opacity =   (byte)Global.Properties.Item("Opacity").Value;
+            var thickness = (byte)Global.Properties.Item("Thickness").Value;
 
             var col = ((SolidColorBrush)this.Background).Color;
             col.A = opacity;
@@ -107,7 +98,6 @@ namespace ProjectColoredFrame
                 return this;
             }
         }
-
 
         #endregion
 
@@ -149,6 +139,7 @@ namespace ProjectColoredFrame
                 return this.ActualHeight;
             }
         }
+
         /// <summary>
         /// Disposes an instance of <see cref="FrameMargin"/> class.
         /// </summary>

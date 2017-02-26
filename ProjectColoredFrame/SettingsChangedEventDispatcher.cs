@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProjectColoredFrame
+﻿namespace ProjectColoredFrame
 {
+    using System;
+
     internal sealed class SettingsChangedEventDispatcher
     {
-        public event EventHandler<EventArgs> SettingsChanged = delegate
-        { };
+        public event EventHandler<EventArgs> SettingsChanged;
 
         public void RaiseSettingsChanged(object sender)
         {
-            SettingsChanged(sender, EventArgs.Empty);
+            this.SettingsChanged?.Invoke(sender, EventArgs.Empty);
         }
     }
 }
