@@ -2,7 +2,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
     <Identity Id="ProjectColoredFrame.MaximKamalov.ba220bb9-25b4-4dd7-969b-4968b29a3341" Version="0.9.2" Language="en-US" Publisher="Maxim Kamalov" />
-    <DisplayName>ProjectColoredFrame</DisplayName>
+    <DisplayName>Project-Colored Frame</DisplayName>
     <Description xml:space="preserve">Helps you to differentiate between editing documents belonging to different projects by adding a thin faintly colored border.</Description>
     <MoreInfo>https://visualstudiogallery.msdn.microsoft.com/6eb7179c-968d-4076-a74a-81251822dfa4</MoreInfo>
     <License>LICENSE.txt</License>
@@ -12,7 +12,7 @@
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[14.0, 16.0)" />
-    <InstallationTarget Version="[12.0, 16.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
+    <InstallationTarget Version="[14.0, 16.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
     <InstallationTarget Version="[14.0, 16.0)" Id="Microsoft.VisualStudio.Community" />
     <InstallationTarget Version="[14.0, 16.0)" Id="Microsoft.VisualStudio.Enterprise" />
   </Installation>
