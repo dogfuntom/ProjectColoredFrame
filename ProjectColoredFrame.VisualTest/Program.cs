@@ -2,13 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using static System.Math;
     using System.Collections.Immutable;
-    using System.Windows.Media;
+    using System.Linq;
 
+    /// <summary>
+    /// This utility allows to check visually if palette mapping works as intented.
+    /// </summary>
     class Program
     {
         private static readonly IReadOnlyList<ConsoleColor> PredefinedPalette = ImmutableArray.Create(
@@ -22,18 +21,15 @@
 
         private static readonly Random Random = new Random();
 
-        static void Main(string[] args)
+        private static void DoRandomnessTest()
         {
-            var priorColor = Console.ForegroundColor;
-
-            DoRandomnessTest();
-
-            Console.ForegroundColor = priorColor;
-
-            DoStabilityTest();
-
-            Console.ForegroundColor = priorColor;
-            Console.ReadKey();
+            Console.WriteLine("Randomness and inter-stability test\n");
+            for (int i = 0; i < 16; i++)
+            {
+                var names = GenerateMiniNames();
+                MapAndPrint(names);
+            }
+            Console.WriteLine();
         }
 
         private static void DoStabilityTest()
@@ -76,29 +72,9 @@
             Console.WriteLine();
         }
 
-        private static void DoRandomnessTest()
+        private static string GenerateMiniName()
         {
-            Console.WriteLine("Randomness and inter-stability test\n");
-            for (int i = 0; i < 16; i++)
-            {
-                var names = GenerateMiniNames();
-                MapAndPrint(names);
-            }
-            Console.WriteLine();
-        }
-
-        private static void MapAndPrint(ICollection<string> names)
-        {
-            var mapping = PaletteMapping.Map(names.ToImmutableArray(), PredefinedPalette.Count);
-
-            foreach (var name in names)
-            {
-                var color = PredefinedPalette[mapping[name.GetHashCode()]];
-                Console.ForegroundColor = color;
-                Console.Write(name);
-            }
-
-            Console.WriteLine();
+            return ((char)Random.Next('a', 'z')).ToString();
         }
 
         private static string[] GenerateMiniNames()
@@ -114,9 +90,32 @@
             return result;
         }
 
-        private static string GenerateMiniName()
+        static void Main(string[] args)
         {
-            return ((char)Random.Next('a', 'z')).ToString();
+            var priorColor = Console.ForegroundColor;
+
+            DoRandomnessTest();
+
+            Console.ForegroundColor = priorColor;
+
+            DoStabilityTest();
+
+            Console.ForegroundColor = priorColor;
+            Console.ReadKey();
+        }
+
+        private static void MapAndPrint(ICollection<string> names)
+        {
+            var mapping = PaletteMapping.Map(names.ToImmutableArray(), PredefinedPalette.Count);
+
+            foreach (var name in names)
+            {
+                var color = PredefinedPalette[mapping[name.GetHashCode()]];
+                Console.ForegroundColor = color;
+                Console.Write(name);
+            }
+
+            Console.WriteLine();
         }
     }
 }

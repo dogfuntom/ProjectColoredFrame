@@ -10,8 +10,8 @@
     /// why not expose and list them in one place here.
     /// </summary>
     /// <remarks>
-    /// By full-blown global it's meant something less innocent than Color.Green or string.Empty,
-    /// something closer to MyFavoriteSingletonService.Instance.
+    /// Here full-blown global means something less innocent than Color.Green or string.Empty,
+    /// i.e. something closer to MyFavoriteSingletonService.Instance.
     /// </remarks>
     internal static class Global
     {
