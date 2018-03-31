@@ -1,0 +1,4 @@
+﻿This file lists those rule changes that are benefitial only for VSIX (or only for this project).
+It may allow to reuse the ruleset elsewhere (after returning listed rule changes to defaults).
+
+(Currently this file is not started.)

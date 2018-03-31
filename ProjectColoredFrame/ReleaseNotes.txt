@@ -1,4 +1,8 @@
-﻿== 0.9.2 (?) ==
+﻿== 1.0.0 (01.04.2018) ==
+
+Added option to factor in solution absolute path. If enabled, multiple copies of the same solution will have different colors.
+
+== 0.9.2 (27.02.2017) ==
 
 Improved performance for VS 2017 RC.
 Removed Integrated Shell 12 installation target (it was listed by mistype).

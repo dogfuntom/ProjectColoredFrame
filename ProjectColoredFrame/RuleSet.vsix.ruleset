@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="corefx style in Unity" Description="These ruleset does three things. It adheres to corefx C# coding style. It removes conflicting rules. It removes a few rules that are harmful for Unity3d C#6 programming. Full removing in all three cases is mostly avoided, rules are usually toned-down instead." ToolsVersion="15.0">
+  <Include Path="basiccorrectnessrules.ruleset" Action="Default" />
+  <Include Path="basicdesignguidelinerules.ruleset" Action="Default" />
+  <Include Path="extendedcorrectnessrules.ruleset" Action="Default" />
+  <Include Path="extendeddesignguidelinerules.ruleset" Action="Default" />
+  <Include Path="minimumrecommendedrules.ruleset" Action="Default" />
+  <Rules AnalyzerId="ClrHeapAllocationAnalyzer" RuleNamespace="ClrHeapAllocationAnalyzer">
+    <Rule Id="HeapAnalyzerExplicitNewAnonymousObjectRule" Action="Hidden" />
+    <Rule Id="HeapAnalyzerExplicitNewArrayRule" Action="Hidden" />
+    <Rule Id="HeapAnalyzerExplicitNewObjectRule" Action="Hidden" />
+    <Rule Id="HeapAnalyzerMethodGroupAllocationRule" Action="Hidden" />
+  </Rules>
+  <Rules AnalyzerId="CodeCracker.CSharp" RuleNamespace="CodeCracker.CSharp">
+    <Rule Id="CC0001" Action="Hidden" />
+    <Rule Id="CC0057" Action="Hidden" />
+    <Rule Id="CC0068" Action="Hidden" />
+    <Rule Id="CC0091" Action="Info" />
+    <Rule Id="CC0097" Action="Hidden" />
+    <Rule Id="CC0105" Action="Info" />
+  </Rules>
+  <Rules AnalyzerId="MappingGenerator" RuleNamespace="MappingGenerator">
+    <Rule Id="MappingGenerator" Action="Hidden" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.NetFramework.CSharp.Analyzers" RuleNamespace="Microsoft.NetFramework.CSharp.Analyzers">
+    <Rule Id="CA1300" Action="Warning" />
+    <Rule Id="CA1301" Action="Warning" />
+    <Rule Id="CA1306" Action="Warning" />
+    <Rule Id="CA2212" Action="Warning" />
+    <Rule Id="CA2232" Action="Warning" />
+    <Rule Id="CA2236" Action="Warning" />
+    <Rule Id="CA2239" Action="Warning" />
+    <Rule Id="CA3076" Action="Warning" />
+    <Rule Id="CA3077" Action="Warning" />
+    <Rule Id="CA5350" Action="Warning" />
+    <Rule Id="CA5351" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="RefactoringEssentials" RuleNamespace="RefactoringEssentials">
+    <Rule Id="RECS0020" Action="Info" />
+    <Rule Id="RECS0129" Action="None" />
+    <Rule Id="RECS0154" Action="Hidden" />
+  </Rules>
+  <Rules AnalyzerId="Roslynator.CSharp.Analyzers" RuleNamespace="Roslynator.CSharp.Analyzers">
+    <Rule Id="RCS1123" Action="Hidden" />
+    <Rule Id="RCS1138" Action="Hidden" />
+    <Rule Id="RCS1139" Action="Hidden" />
+    <Rule Id="RCS1141" Action="Hidden" />
+    <Rule Id="RCS1142" Action="Hidden" />
+  </Rules>
+  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+    <Rule Id="S1075" Action="Info" />
+    <Rule Id="S1104" Action="Info" />
+    <Rule Id="S112" Action="Info" />
+    <Rule Id="S1123" Action="Hidden" />
+    <Rule Id="S1144" Action="None" />
+    <Rule Id="S125" Action="Info" />
+    <Rule Id="S2259" Action="Hidden" />
+    <Rule Id="S2583" Action="Info" />
+    <Rule Id="S2681" Action="Info" />
+    <Rule Id="S3172" Action="Info" />
+    <Rule Id="S3265" Action="Info" />
+    <Rule Id="S3453" Action="Info" />
+    <Rule Id="S3887" Action="Info" />
+    <Rule Id="S3903" Action="Info" />
+    <Rule Id="S4220" Action="Info" />
+  </Rules>
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1200" Action="None" />
+    <Rule Id="SA1305" Action="Warning" />
+    <Rule Id="SA1615" Action="Hidden" />
+    <Rule Id="SX1101" Action="Warning" />
+    <Rule Id="SX1309" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="Text.CSharp.Analyzers" RuleNamespace="Text.CSharp.Analyzers">
+    <Rule Id="CA1704" Action="Info" />
+  </Rules>
+  <Rules AnalyzerId="Wintellect.Analyzers" RuleNamespace="Wintellect.Analyzers">
+    <Rule Id="Wintellect003" Action="Info" />
+    <Rule Id="Wintellect004" Action="None" />
+  </Rules>
+</RuleSet>

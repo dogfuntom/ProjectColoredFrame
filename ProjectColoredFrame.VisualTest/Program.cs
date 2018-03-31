@@ -8,9 +8,9 @@
     /// <summary>
     /// This utility allows to check visually if palette mapping works as intented.
     /// </summary>
-    class Program
+    internal static class Program
     {
-        private static readonly IReadOnlyList<ConsoleColor> PredefinedPalette = ImmutableArray.Create(
+        private static readonly IReadOnlyList<ConsoleColor> s_predefinedPalette = ImmutableArray.Create(
             ConsoleColor.Red,
             ConsoleColor.Green,
             ConsoleColor.Yellow,
@@ -19,7 +19,7 @@
             ConsoleColor.Cyan
         );
 
-        private static readonly Random Random = new Random();
+        private static readonly Random s_random = new Random();
 
         private static void DoRandomnessTest()
         {
@@ -41,7 +41,7 @@
 
             for (int i = 0; i < 16; i++)
             {
-                var mutateType = Random.Next(4);
+                var mutateType = s_random.Next(4);
                 switch (mutateType)
                 {
                     case 0:
@@ -51,16 +51,16 @@
                     case 1:
                         // Remove.
                         if (names.Count > 1)
-                            names.RemoveAt(Random.Next(names.Count));
+                            names.RemoveAt(s_random.Next(names.Count));
                         break;
                     case 2:
                         // Rename.
-                        names[Random.Next(names.Count)] = GenerateMiniName();
+                        names[s_random.Next(names.Count)] = GenerateMiniName();
                         break;
                     case 3:
                         // Move.
-                        var fromIndex = Random.Next(names.Count);
-                        var toIndex = Random.Next(names.Count - 1);
+                        var fromIndex = s_random.Next(names.Count);
+                        var toIndex = s_random.Next(names.Count - 1);
                         names.Insert(toIndex, names[fromIndex]);
                         break;
                     default:
@@ -74,12 +74,12 @@
 
         private static string GenerateMiniName()
         {
-            return ((char)Random.Next('a', 'z')).ToString();
+            return ((char)s_random.Next('a', 'z')).ToString();
         }
 
         private static string[] GenerateMiniNames()
         {
-            var count = Random.Next(2, 8);
+            var count = s_random.Next(2, 8);
             var result = new string[count];
 
             for (int i = 0; i < count; i++)
@@ -106,11 +106,11 @@
 
         private static void MapAndPrint(ICollection<string> names)
         {
-            var mapping = PaletteMapping.Map(names.ToImmutableArray(), PredefinedPalette.Count);
+            var mapping = PaletteDistribution.Map(names.Select(name => name.GetHashCode()).ToImmutableArray(), s_predefinedPalette.Count);
 
             foreach (var name in names)
             {
-                var color = PredefinedPalette[mapping[name.GetHashCode()]];
+                var color = s_predefinedPalette[mapping[name.GetHashCode()]];
                 Console.ForegroundColor = color;
                 Console.Write(name);
             }
