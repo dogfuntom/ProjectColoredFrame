@@ -6,7 +6,6 @@ using System.Windows.Media;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-using System.Collections.Immutable;
 
 namespace ProjectColoredFrame.Mapping
 {
@@ -111,7 +110,7 @@ namespace ProjectColoredFrame.Mapping
 		{
 			var signatures = (from project in solution.Projects.Cast<Project>()
 							  select _signatureGenerator.GetSignature(project.UniqueName, solution.FullName))
-							  .ToImmutableArray();
+							  .ToList();
 
 			return PaletteDistribution.Map(signatures, palette.Count);
 		}
