@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Windows.Media;
 using EnvDTE;
 using EnvDTE80;
@@ -9,35 +6,24 @@ using Microsoft.VisualStudio.Shell;
 
 namespace ProjectColoredFrame.Mapping
 {
-	internal sealed class ColorDecider
+	internal sealed partial class ColorDecider
 	{
-		private static readonly IReadOnlyList<Color> s_predefinedPalette = new ReadOnlyCollection<Color>(new[] {
-			(Color)ColorConverter.ConvertFromString("#FFE51400"), // red
-            (Color)ColorConverter.ConvertFromString("#FF60A917"), // green
-            (Color)ColorConverter.ConvertFromString("#FFE3C800"), // yellow
-            (Color)ColorConverter.ConvertFromString("#FF0050EF"), // cobalt
-            (Color)ColorConverter.ConvertFromString("#FFD80073"), // magenta
-            (Color)ColorConverter.ConvertFromString("#FF00ABA9")  // teal
-        });
-
 		/// <summary>
 		/// The mapping from project signature to index of color in palette.
 		/// </summary>
 		private readonly IReadOnlyDictionary<int, int> _mapping;
 
-		private readonly IReadOnlyList<Color> _palette = LoadPalette();
+		private readonly IReadOnlyList<Color> _palette;
 		private readonly SignatureGenerator _signatureGenerator;
 
-		private readonly Solution _solution;
+		private readonly string _solutionFullName;
 
-		public ColorDecider(Solution solution, SignatureGenerator signatureGenerator)
+		private ColorDecider(string solutionFullName, SignatureGenerator signatureGenerator, IReadOnlyList<Color> palette, IReadOnlyDictionary<int, int> mapping)
 		{
+			_solutionFullName = solutionFullName;
 			_signatureGenerator = signatureGenerator;
-			_solution = solution;
-
-			_mapping = Map(_solution, _palette);
-
-			DebugLogMapping();
+			_palette = palette;
+			_mapping = mapping;
 		}
 
 		public Color GetColorOf(string fileName)
@@ -50,49 +36,6 @@ namespace ProjectColoredFrame.Mapping
 			return project == null ? Colors.Transparent : GetColorOf(project);
 		}
 
-		private static Color DrawingColorToMediaColor(System.Drawing.Color source)
-		{
-			return new Color
-			{
-				A = source.A,
-				B = source.B,
-				G = source.G,
-				R = source.R
-			};
-		}
-
-		private static IReadOnlyList<Color> LoadPalette()
-		{
-			var options = ProjectColoredFramePackage.Current.OptionsGrid;
-			var replace = options.ReplaceDefaultPalette;
-			System.Drawing.Color[] customPalette = options.CustomColors;
-
-			var result = new List<Color>(s_predefinedPalette.Count);
-			if ((!replace) || customPalette.IsNullOrEmpty())
-				result.AddRange(s_predefinedPalette);
-
-			// convert System.Drawing.Color to System.Windows.Media.Color
-			var toAdd = from c in customPalette
-						select DrawingColorToMediaColor(c);
-			result.AddRange(toAdd);
-
-			return new ReadOnlyCollection<Color>(result);
-		}
-
-		[Conditional("DEBUG")]
-		private void DebugLogMapping()
-		{
-			Debug.Indent();
-			foreach (Project project in _solution)
-			{
-				Debug.Write(project.Name);
-				Debug.Write(" got color ");
-				Debug.Write(GetColorOf(project).ToString());
-				Debug.WriteLine(" assigned to it.");
-			}
-			Debug.Unindent();
-		}
-
 		/// <summary>
 		/// Gets the color of.
 		/// </summary>
@@ -103,16 +46,7 @@ namespace ProjectColoredFrame.Mapping
 			if (project == null)
 				return Colors.Transparent;
 
-			return _mapping.TryGetValue(_signatureGenerator.GetSignature(project.UniqueName, _solution.FullName), out var index) ? _palette[index] : Colors.Transparent;
-		}
-
-		private IReadOnlyDictionary<int, int> Map(Solution solution, IReadOnlyList<Color> palette)
-		{
-			var signatures = (from project in solution.Projects.Cast<Project>()
-							  select _signatureGenerator.GetSignature(project.UniqueName, solution.FullName))
-							  .ToList();
-
-			return PaletteDistribution.Map(signatures, palette.Count);
+			return _mapping.TryGetValue(_signatureGenerator.GetSignature(project.UniqueName, _solutionFullName), out var index) ? _palette[index] : Colors.Transparent;
 		}
 	}
 }

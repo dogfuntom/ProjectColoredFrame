@@ -2,6 +2,7 @@
 {
     using System;
 
+	// TODO: Consider renaming to Options..
     internal sealed class SettingsChangedEventDispatcher
     {
         public event EventHandler<EventArgs> SettingsChanged;

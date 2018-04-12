@@ -59,7 +59,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\SolutionChangeListener.cs" />
+    <Compile Include="CustomMapping.cs" />
     <Compile Include="Mapping\ColorDecider.cs" />
+    <Compile Include="Mapping\ColorDecider.Factory.cs" />
     <Compile Include="Mapping\PaletteDistribution.cs" />
     <Compile Include="Core\Services.cs" />
     <Compile Include="Extensions.cs" />

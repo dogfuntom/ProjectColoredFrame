@@ -59,7 +59,7 @@
     <Rule Id="S2681" Action="Info" />
     <Rule Id="S3172" Action="Info" />
     <Rule Id="S3265" Action="Info" />
-    <Rule Id="S3453" Action="Info" />
+    <Rule Id="S3453" Action="Hidden" />
     <Rule Id="S3887" Action="Info" />
     <Rule Id="S3903" Action="Info" />
     <Rule Id="S4220" Action="Info" />
