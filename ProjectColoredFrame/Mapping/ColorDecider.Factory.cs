@@ -28,8 +28,6 @@ namespace ProjectColoredFrame.Mapping
 		// so no benefit in cluttering up the codebase by having them outside of it.
 		public static ColorDecider Create(Solution solution, ProjectColoredFrameOptionsGrid options)
 		{
-			Color drawingColorToMediaColor(System.Drawing.Color source) => new Color { A = source.A, B = source.B, G = source.G, R = source.R };
-
 			IReadOnlyList<Color> loadPalette()
 			{
 				var replace = options.ReplaceDefaultPalette;
@@ -41,7 +39,7 @@ namespace ProjectColoredFrame.Mapping
 
 				// convert System.Drawing.Color to System.Windows.Media.Color
 				var toAdd = from c in customPalette
-							select drawingColorToMediaColor(c);
+							select DrawingColorToMediaColor(c);
 				result.AddRange(toAdd);
 
 				return new ReadOnlyCollection<Color>(result);
@@ -59,11 +57,18 @@ namespace ProjectColoredFrame.Mapping
 			}
 
 			IReadOnlyList<Color> palette = loadPalette();
-			var instance = new ColorDecider(solution.FullName, signatureGenerator, palette, map(palette.Count));
+			var instance = new ColorDecider(
+				solution.FullName,
+				signatureGenerator,
+				palette,
+				map(palette.Count),
+				new ReadOnlyCollection<ICustomMapping>(options.CustomMappings.Cast<ICustomMapping>().ToList()));
 
 			instance.DebugLogMapping(solution);
 			return instance;
 		}
+
+		private static Color DrawingColorToMediaColor(System.Drawing.Color source) => new Color { A = source.A, B = source.B, G = source.G, R = source.R };
 
 		[Conditional("DEBUG")]
 		private void DebugLogMapping(Solution solution)

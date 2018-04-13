@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 using EnvDTE;
 using EnvDTE80;
@@ -8,6 +9,8 @@ namespace ProjectColoredFrame.Mapping
 {
 	internal sealed partial class ColorDecider
 	{
+		private readonly IReadOnlyList<ICustomMapping> _customMappings;
+
 		/// <summary>
 		/// The mapping from project signature to index of color in palette.
 		/// </summary>
@@ -18,12 +21,18 @@ namespace ProjectColoredFrame.Mapping
 
 		private readonly string _solutionFullName;
 
-		private ColorDecider(string solutionFullName, SignatureGenerator signatureGenerator, IReadOnlyList<Color> palette, IReadOnlyDictionary<int, int> mapping)
+		private ColorDecider(
+			string solutionFullName,
+			SignatureGenerator signatureGenerator,
+			IReadOnlyList<Color> palette,
+			IReadOnlyDictionary<int, int> mapping,
+			IReadOnlyList<ICustomMapping> customMappings)
 		{
 			_solutionFullName = solutionFullName;
 			_signatureGenerator = signatureGenerator;
 			_palette = palette;
 			_mapping = mapping;
+			_customMappings = customMappings;
 		}
 
 		public Color GetColorOf(string fileName)
@@ -36,15 +45,24 @@ namespace ProjectColoredFrame.Mapping
 			return project == null ? Colors.Transparent : GetColorOf(project);
 		}
 
-		/// <summary>
-		/// Gets the color of.
-		/// </summary>
-		/// <param name="project">The project.</param>
-		/// <returns></returns>
+		private static bool IsMatch(string name, string wildcard)
+		{
+			// From: https://stackoverflow.com/a/30300521/776442
+			string wildCardToRegular(string value) => "^" + Regex.Escape(value).Replace(@"\?", ".").Replace(@"\*", ".*") + "$";
+
+			return Regex.IsMatch(name, wildCardToRegular(wildcard), RegexOptions.Compiled);
+		}
+
 		private Color GetColorOf(Project project)
 		{
 			if (project == null)
 				return Colors.Transparent;
+
+			foreach (var custom in _customMappings)
+			{
+				if (IsMatch(project.Name, custom.Wildcard))
+					return DrawingColorToMediaColor(custom.Color);
+			}
 
 			return _mapping.TryGetValue(_signatureGenerator.GetSignature(project.UniqueName, _solutionFullName), out var index) ? _palette[index] : Colors.Transparent;
 		}

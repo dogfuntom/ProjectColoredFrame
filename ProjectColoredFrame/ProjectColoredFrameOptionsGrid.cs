@@ -22,6 +22,7 @@ namespace ProjectColoredFrame
 		private const string OpacityAndThicknessCategory = "Opacity & thickness";
 		private const string BehaviorCategory = "Behavior";
 		private const string CustomPaletteCategory = "Custom palette";
+		private const string CustomMappingsCategory = "Custom mappings";
 
 		private const string CustomColorsPropertyName = nameof(CustomColors);
 
@@ -31,6 +32,7 @@ namespace ProjectColoredFrame
 		private const bool FactorInSolutionPathDefault = false;
 
 		private const bool ReplaceDefaultPaletteDefault = false;
+		private const string ReplaceDefaultPaletteDisplayName = "Replace default palette";
 
 		[Category(OpacityAndThicknessCategory)]
 		[DisplayName("Opacity")]
@@ -51,15 +53,22 @@ namespace ProjectColoredFrame
 		public bool FactorInSolutionPath { get; set; } = FactorInSolutionPathDefault;
 
 		[Category(CustomPaletteCategory)]
-		[DisplayName("Replace default palette")]
-		[Description("Replace default color set instead of appending to it. If custom palette is empty, this option will be ignored.")]
+		[DisplayName(ReplaceDefaultPaletteDisplayName)]
+		[Description("Replace built-in color set instead of appending to it. If custom palette is empty, this option will be ignored.")]
 		[DefaultValue(ReplaceDefaultPaletteDefault)]
 		public bool ReplaceDefaultPalette { get; set; } = ReplaceDefaultPaletteDefault;
 
+#pragma warning disable CA1819 // Properties should not return arrays
 		[Category(CustomPaletteCategory)]
 		[DisplayName("Additional colors")]
-		[Description("Additional custom colors.")]
-		public Color[] CustomColors { get; set; } = new Color[0];
+		[Description("See description of '" + ReplaceDefaultPaletteDisplayName + "' option for more information.")]
+		public Color[] CustomColors { get; set; } = Array.Empty<Color>();
+
+		[Category(CustomMappingsCategory)]
+		[DisplayName("Custom mappings")]
+		[Description("If project name matches wildcard, then corresponding border color will be applied. Wildcards support * and ? operators.")]
+		public CustomMapping[] CustomMappings { get; set; } = new[] { new CustomMapping { Wildcard = "*read?only*", Color = Color.Purple } };
+#pragma warning restore CA1819 // Properties should not return arrays
 
 		protected override void OnApply(PageApplyEventArgs e)
 		{
