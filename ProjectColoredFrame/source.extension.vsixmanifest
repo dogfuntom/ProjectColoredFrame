@@ -7,7 +7,7 @@
         <MoreInfo>https://visualstudiogallery.msdn.microsoft.com/6eb7179c-968d-4076-a74a-81251822dfa4</MoreInfo>
         <License>LICENSE.txt</License>
         <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
-        <Icon>ProjectColoredFramePackage.ico</Icon>
+        <Icon>Resources\ProjectColoredFramePackage.ico</Icon>
         <Tags>text editor, border, frame, code, project, color, document, productivity, editor, 2017</Tags>
     </Metadata>
     <Installation>
