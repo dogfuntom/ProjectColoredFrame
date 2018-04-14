@@ -59,7 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\SolutionChangeListener.cs" />
-    <Compile Include="CustomMapping.cs" />
+    <Compile Include="Settings\CustomMapping.cs" />
     <Compile Include="Mapping\ColorDecider.cs" />
     <Compile Include="Mapping\ColorDecider.Factory.cs" />
     <Compile Include="Mapping\PaletteDistribution.cs" />
@@ -70,13 +70,13 @@
     <Compile Include="Margin\FrameMargin.cs" />
     <Compile Include="Margin\FrameMarginFactory.cs" />
     <Compile Include="Global.cs" />
-    <Compile Include="ProjectColoredFrameOptionsGrid.cs">
+    <Compile Include="Settings\ProjectColoredFrameOptionsGrid.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProjectColoredFramePackage.cs" />
     <Compile Include="ProjectColoredFramePackageGuids.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsChangedEventDispatcher.cs" />
+    <Compile Include="Settings\SettingsChangedEventDispatcher.cs" />
     <Compile Include="ThirdParty\MiniJson.cs" />
   </ItemGroup>
   <ItemGroup>
