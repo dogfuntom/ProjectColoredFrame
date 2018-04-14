@@ -229,7 +229,7 @@
     <Content Include="Properties\RuleSet.vsix.ruleset.txt" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\VSPackage.resx">
+    <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
