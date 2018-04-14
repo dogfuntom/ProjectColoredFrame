@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Settings;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Settings;
+using MiniJSON;
 
 namespace ProjectColoredFrame
 {
@@ -24,7 +26,10 @@ namespace ProjectColoredFrame
 		private const string CustomPaletteCategory = "Custom palette";
 		private const string CustomMappingsCategory = "Custom mappings";
 
-		private const string CustomColorsPropertyName = nameof(CustomColors);
+#pragma warning disable CC0021 // Use nameof
+		private const string CustomColorsPropertyName = "CustomColors";
+		private const string CustomMappingsPropertyName = "CustomMappings";
+#pragma warning restore CC0021 // Use nameof
 
 		private const byte OpacityDefault = byte.MaxValue / 4;
 		private const byte ThicknessDefault = 2;
@@ -77,10 +82,12 @@ namespace ProjectColoredFrame
 		}
 
 		/// <summary>
-		/// VS serialization system refuses to handle arrays correctly so <see cref="CustomColors"/> must be handled manually.
+		/// VS serialization system refuses to handle arrays correctly so they must be handled manually.
 		/// Handling other properties is left to it through <c>base</c> call.
 		/// (See https://stackoverflow.com/q/32751040/776442e .)
 		/// </summary>
+		// NOTE: MiniJson is used to serialize custom mappings because it can be just added as file.
+		// Handling packages in VS2015-compatible VSIX is a PITA. When 2015 dropped, things can be simplified and properified.
 		public override void SaveSettingsToStorage()
 		{
 			base.SaveSettingsToStorage();
@@ -89,6 +96,7 @@ namespace ProjectColoredFrame
 			if (!userSettingsStore.CollectionExists(_fullCollectionName))
 				userSettingsStore.CreateCollection(_fullCollectionName);
 
+			// Save custom colors.
 			using (var stream = new MemoryStream(4))
 			{
 				foreach (var color in CustomColors)
@@ -103,6 +111,10 @@ namespace ProjectColoredFrame
 
 				userSettingsStore.SetMemoryStream(_fullCollectionName, CustomColorsPropertyName, stream);
 			}
+
+			// Save custom mappings.
+			var dict = CustomMappings.ToDictionary(cm => cm.Wildcard, cm => cm.Color.ToArgb());
+			userSettingsStore.SetString(_fullCollectionName, CustomMappingsPropertyName, Json.Serialize(dict));
 		}
 
 		/// <summary>
@@ -116,6 +128,7 @@ namespace ProjectColoredFrame
 			if (!userSettingsStore.CollectionExists(_fullCollectionName))
 				return;
 
+			// Read custom colors.
 			using (var stream = userSettingsStore.GetMemoryStream(_fullCollectionName, CustomColorsPropertyName))
 			{
 				stream.Seek(0, SeekOrigin.Begin);
@@ -129,6 +142,19 @@ namespace ProjectColoredFrame
 
 				CustomColors = colors.ToArray();
 			}
+
+			// Read custom mappings.
+			if (!userSettingsStore.PropertyExists(_fullCollectionName, CustomMappingsPropertyName))
+				return;
+
+			var json = userSettingsStore.GetString(_fullCollectionName, CustomMappingsPropertyName);
+			var deserialized = Json.Deserialize(json) as Dictionary<string, object>;
+#pragma warning disable IDE0012 // Simplify Names
+			CustomMappings = (from kv in deserialized
+							  let color = (kv.Value is long) ? (int)(long)kv.Value : 0
+							  select new CustomMapping { Wildcard = kv.Key, Color = Color.FromArgb(color) })
+							  .ToArray();
+#pragma warning restore IDE0012 // Simplify Names
 		}
 
 		private static WritableSettingsStore GetUserSettingsStore()
