@@ -1,8 +1,8 @@
-﻿== 1.1.0 (14.04.2018) ==
+﻿== 1.1 (14.04.2018) ==
 
 Added option to assign custom colors to projects with specified named.
 
-== 1.0.1 (10.04.2018) ==
+== 1.0 (10.04.2018) ==
 
 Added option to factor in solution absolute path. If enabled, multiple copies of the same solution will have different colors.
 

@@ -1,4 +1,6 @@
-﻿/*
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+/*
  * Copyright (c) 2013 Calvin Rien
  *
  * Based on the JSON parser by Patrick van Bergen
@@ -182,7 +184,7 @@ namespace MiniJSON
 							// value
 							TOKEN valueToken = NextToken;
 							object value = ParseByToken(valueToken);
-							if (value == null && valueToken != TOKEN.NULL)
+							if (value == null)
 								return null;
 							table[name] = value;
 							break;

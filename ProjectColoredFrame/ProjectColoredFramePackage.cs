@@ -1,4 +1,6 @@
-﻿namespace ProjectColoredFrame
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+namespace ProjectColoredFrame
 {
     using System;
     using System.Diagnostics;
@@ -33,7 +35,7 @@
     [ProvideProfile(typeof(ProjectColoredFrameOptionsGrid),
         Global.Name, Global.OptionsPageName, 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
     [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects)]
-    public sealed class ProjectColoredFramePackage : Package
+    public sealed class ProjectColoredFramePackage : Package //-V3072
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectColoredFramePackage"/> class.
