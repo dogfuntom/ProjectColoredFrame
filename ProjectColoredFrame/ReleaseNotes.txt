@@ -1,4 +1,9 @@
-﻿== 1.1 (14.04.2018) ==
+﻿== 1.2 (05.04.2019) ==
+
+Removed support for 2015.
+Added support for 2019.
+
+== 1.1 (14.04.2018) ==
 
 Added option to assign custom colors to projects with specified named.
 
