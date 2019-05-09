@@ -17,23 +17,22 @@ namespace ProjectColoredFrame.Core
 
 		private readonly SolutionChangeListener _solutionChangeListener;
 
-		public Services(DTE2 dte)
+		public Services(DTE2 dte, ProjectColoredFramePackage package)
 		{
 			SettingsChangedEventDispatcher = new SettingsChangedEventDispatcher();
 
 			_solutionChangeListener = new SolutionChangeListener(dte);
-			_solutionChangeListener.MappingBecameDirty += (s, e) => Remap();
+			_solutionChangeListener.MappingBecameDirty += (s, e) => Remap(package);
 
 			_dte = dte;
-			Remap();
+			Remap(package);
 		}
 
 		public ColorDecider Mapping { get; private set; }
 
-		private void Remap()
+		private void Remap(ProjectColoredFramePackage package)
 		{
-			//Mapping = new ColorDecider(_dte.Solution, new SignatureGenerator(ProjectColoredFramePackage.Current.OptionsGrid.FactorInSolutionPath));
-			Mapping = ColorDecider.Create(_dte.Solution, ProjectColoredFramePackage.Current.OptionsGrid);
+			Mapping = ColorDecider.Create(_dte.Solution, package.OptionsGrid);
 		}
 	}
 }

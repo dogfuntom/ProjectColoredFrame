@@ -77,11 +77,20 @@ namespace ProjectColoredFrame
 		public CustomMapping[] CustomMappings { get; set; } = new[] { new CustomMapping { Wildcard = "*read?only*", Color = Color.Purple } };
 #pragma warning restore CA1819 // Properties should not return arrays
 
-		protected override void OnApply(PageApplyEventArgs e)
+		protected override async void OnApply(PageApplyEventArgs e)
 		{
 			base.OnApply(e);
-			Global.Services?.SettingsChangedEventDispatcher?.RaiseSettingsChanged(this);
-		}
+            try
+            {
+                var services = (await Global.GetPackageAsync()).Services;
+                services.SettingsChangedEventDispatcher?.RaiseSettingsChanged(this);
+
+            }
+            catch (OperationCanceledException)
+            {
+                // Ignore.
+            }
+        }
 
 		/// <summary>
 		/// VS serialization system refuses to handle arrays correctly so they must be handled manually.

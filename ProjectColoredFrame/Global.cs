@@ -5,6 +5,7 @@ namespace ProjectColoredFrame
     using EnvDTE;
     using EnvDTE80;
     using ProjectColoredFrame.Core;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Inevitably every project has at least a few all-out globals.
@@ -20,12 +21,8 @@ namespace ProjectColoredFrame
 
         private static DTE2 DTE => (DTE2)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
 
-        public static bool IsPackageInitialized => Package?.IsInitialized == true;
-
-        public static ProjectColoredFramePackage Package => ProjectColoredFramePackage.Current;
+        public static Task<ProjectColoredFramePackage> GetPackageAsync() => ProjectColoredFramePackage.GetCurrentAsync();
 
         public static Properties Properties => DTE.Properties[Name, OptionsPageName];
-
-        public static Services Services => Package.Services;
     }
 }

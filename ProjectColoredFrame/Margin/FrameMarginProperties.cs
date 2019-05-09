@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 namespace ProjectColoredFrame
 {
+    using System.Threading.Tasks;
     using System.Windows.Media;
 
     /// <summary>
@@ -9,7 +10,7 @@ namespace ProjectColoredFrame
     /// </summary>
     internal sealed class FrameMarginProperties
     {
-        private readonly string filePath;
+        private readonly string _filePath;
 
         public byte Opacity
         { get; private set; }
@@ -26,19 +27,21 @@ namespace ProjectColoredFrame
         /// <param name="filePath">The file path, can be null.</param>
         public FrameMarginProperties(string filePath)
         {
-            this.filePath = filePath;
+            this._filePath = filePath;
         }
 
-        public void Update()
+        public async Task UpdateAsync()
         {
-            var package = Global.Package;
-            var options = ProjectColoredFramePackage.Current.OptionsGrid;
+            var package = await Global.GetPackageAsync();
 
-            this.Opacity = options.Opacity;
-            this.Thickness = options.Thickness;
+            var services = package.Services;
+            var options = package.OptionsGrid;
 
-            this.Color = !string.IsNullOrWhiteSpace(this.filePath)
-                ? package.Services.Mapping.GetColorOf(this.filePath)
+            Opacity = options.Opacity;
+            Thickness = options.Thickness;
+
+            Color = !string.IsNullOrWhiteSpace(_filePath)
+                ? services.Mapping.GetColorOf(_filePath)
                 : Colors.Transparent;
         }
     }

@@ -1,14 +1,12 @@
 ﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
 
 namespace ProjectColoredFrame
 {
@@ -17,17 +15,20 @@ namespace ProjectColoredFrame
     /// </summary>
     internal class FrameMargin : Canvas, IWpfTextViewMargin
     {
+#pragma warning disable CC0021 // Use nameof
         /// <summary>
         /// Margin name.
         /// </summary>
         public const string MarginName = "FrameMargin";
+#pragma warning restore CC0021 // Use nameof
 
         /// <summary>
         /// A value indicating whether the object is disposed.
         /// </summary>
-        private bool isDisposed;
+        private bool _isDisposed;
 
-        private bool isVertical;
+        private readonly bool _isVertical;
+        private readonly Task _initialization;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrameMargin"/> class for a given <paramref name="textView"/>.
@@ -39,8 +40,16 @@ namespace ProjectColoredFrame
             if (!textView.TextDataModel.DocumentBuffer.Properties.TryGetProperty(typeof(ITextDocument), out ITextDocument document))
                 return;
 
-            var props = new FrameMarginProperties(document?.FilePath);
-            props.Update();
+            _isVertical = vertical;
+
+            _initialization = InitializeAsync(document?.FilePath, textView);
+
+        }
+
+        private async Task InitializeAsync(string filePath, IWpfTextView textView)
+        {
+            var props = new FrameMarginProperties(filePath);
+            await props.UpdateAsync();
 
             var borderColor = props.Color;
             borderColor.A = props.Opacity;
@@ -48,40 +57,43 @@ namespace ProjectColoredFrame
             borderBrush.Freeze();
 
             var thickness = props.Thickness;
-            this.MinHeight = this.MinWidth = thickness;
+            MinHeight = MinWidth = thickness;
 
-            if (vertical)
+            if (_isVertical)
             {
-                this.Width = thickness;
-                EventHandler handler = (sender, e) => { this.Height = textView.ViewportHeight * (textView.ZoomLevel / 100); };
+                Width = thickness;
+                EventHandler handler = (sender, e) => { Height = textView.ViewportHeight * (textView.ZoomLevel / 100); };
                 textView.ViewportHeightChanged += handler;
                 textView.ZoomLevelChanged += (sender, e) => handler(sender, e);
             }
             else
-                this.Height = thickness;
+            {
+                Height = thickness;
+            }
 
-            this.ClipToBounds = true;
-            this.Background = borderBrush;
+            ClipToBounds = true;
+            Background = borderBrush;
 
-            this.isVertical = vertical;
-
-            // TODO: Watch for solution change too.
-            Global.Services.SettingsChangedEventDispatcher.SettingsChanged += this.HandleSettingsChanged;
+            // TODO: Also watch for solution change too.
+            var services = (await Global.GetPackageAsync()).Services;
+            services.SettingsChangedEventDispatcher.SettingsChanged += HandleSettingsChanged;
         }
 
         private void HandleSettingsChanged(object sender, EventArgs e)
         {
-            var opacity =   (byte)Global.Properties.Item("Opacity").Value;
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
+            var opacity = (byte)Global.Properties.Item("Opacity").Value;
             var thickness = (byte)Global.Properties.Item("Thickness").Value;
 
-            var col = ((SolidColorBrush)this.Background).Color;
+            var col = ((SolidColorBrush)Background).Color;
             col.A = opacity;
-            this.Background = new SolidColorBrush(col);
+            Background = new SolidColorBrush(col);
 
-            if (this.isVertical)
-                this.Width = thickness;
+            if (_isVertical)
+                Width = thickness;
             else
-                this.Height = thickness;
+                Height = thickness;
         }
 
         #region IWpfTextViewMargin
@@ -96,7 +108,7 @@ namespace ProjectColoredFrame
             // the margin.
             get
             {
-                this.ThrowIfDisposed();
+                ThrowIfDisposed();
                 return this;
             }
         }
@@ -113,7 +125,7 @@ namespace ProjectColoredFrame
         {
             get
             {
-                this.ThrowIfDisposed();
+                ThrowIfDisposed();
 
                 // The margin should always be enabled
                 return true;
@@ -134,11 +146,11 @@ namespace ProjectColoredFrame
         {
             get
             {
-                this.ThrowIfDisposed();
+                ThrowIfDisposed();
 
                 // Since this is a horizontal margin, its width will be bound to the width of the text view.
                 // Therefore, its size is its height.
-                return this.ActualHeight;
+                return ActualHeight;
             }
         }
 
@@ -147,10 +159,10 @@ namespace ProjectColoredFrame
         /// </summary>
         public void Dispose()
         {
-            if (!this.isDisposed)
+            if (!_isDisposed)
             {
                 GC.SuppressFinalize(this);
-                this.isDisposed = true;
+                _isDisposed = true;
             }
         }
 
@@ -175,7 +187,7 @@ namespace ProjectColoredFrame
         /// </summary>
         private void ThrowIfDisposed()
         {
-            if (this.isDisposed)
+            if (_isDisposed)
             {
                 throw new ObjectDisposedException(MarginName);
             }

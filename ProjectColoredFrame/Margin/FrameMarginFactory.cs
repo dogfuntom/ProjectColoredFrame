@@ -26,9 +26,7 @@ namespace ProjectColoredFrame
         /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
-            => Global.IsPackageInitialized
-                ? new FrameMargin(wpfTextViewHost.TextView)
-                : null;
+            => new FrameMargin(wpfTextViewHost.TextView);
     }
 
     /// <summary>
@@ -50,9 +48,7 @@ namespace ProjectColoredFrame
         /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
-            => Global.IsPackageInitialized
-                ? new FrameMargin(wpfTextViewHost.TextView, vertical: false)
-                : null;
+            => new FrameMargin(wpfTextViewHost.TextView, vertical: false);
     }
 
     /// <summary>
@@ -76,9 +72,6 @@ namespace ProjectColoredFrame
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
         {
-            if (!Global.IsPackageInitialized)
-                return null;
-
             var height = wpfTextViewHost.HostControl.Height;
             return new FrameMargin(wpfTextViewHost.TextView, vertical: true);
         }
@@ -104,8 +97,6 @@ namespace ProjectColoredFrame
         /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
-            => Global.IsPackageInitialized
-                ? new FrameMargin(wpfTextViewHost.TextView, vertical: true)
-                : null;
+            => new FrameMargin(wpfTextViewHost.TextView, vertical: true);
     }
 }
