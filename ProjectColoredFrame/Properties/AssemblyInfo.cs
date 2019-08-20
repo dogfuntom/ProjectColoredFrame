@@ -1,7 +1,11 @@
 ﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
+[assembly: InternalsVisibleTo("ProjectColoredFrame.UnitTest, PublicKey=0024000004800000940000000602000000240000525341310004000001000100a904d0d0d1802339caeca4b759763df8a4aa69b758672b5a72361afb9069bd7eaf7dbb8a9e1822c0a1bbaed9930c76ce16e3a592dd6a35d771555bf904048f36daefdc136fbe6640e5f6f57ecd705cdfafa9c7a3c926fabf3f57a6cd080cca4042574ed88c9b8581092128c8c9fb58fd59a97be80742022b6d3029b5b58450dc")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7")] 
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information

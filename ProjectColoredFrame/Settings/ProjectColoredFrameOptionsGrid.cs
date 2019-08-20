@@ -83,7 +83,7 @@ namespace ProjectColoredFrame
             try
             {
                 var services = (await Global.GetPackageAsync()).Services;
-                services.SettingsChangedEventDispatcher?.RaiseSettingsChanged(this);
+                services.MappingEvents?.RaiseOptionsChanged(this);
 
             }
             catch (OperationCanceledException)
@@ -170,7 +170,8 @@ namespace ProjectColoredFrame
 
 		private static WritableSettingsStore GetUserSettingsStore()
 		{
-			var settingsManager = new ShellSettingsManager(ServiceProvider.GlobalProvider);
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var settingsManager = new ShellSettingsManager(ServiceProvider.GlobalProvider);
 			var userSettingsStore = settingsManager.GetWritableSettingsStore(SettingsScope.UserSettings);
 			return userSettingsStore;
 		}

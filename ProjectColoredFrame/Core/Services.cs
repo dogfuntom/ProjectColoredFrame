@@ -2,27 +2,30 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 using EnvDTE80;
 using ProjectColoredFrame.Mapping;
+using System;
 
 namespace ProjectColoredFrame.Core
 {
 	/// <summary>
-	/// Lightweight alternative to VS-services. Stores instances of needed system services
+	/// Lightweight imitation of VS's services. Stores instances of needed system services
 	/// and service-like class instances of this codebase itself.
 	/// Somewhat similar to Service Locator.
 	/// </summary>
 	internal sealed class Services
 	{
-		public readonly SettingsChangedEventDispatcher SettingsChangedEventDispatcher;
-		private readonly DTE2 _dte;
+		public readonly MappingEventsDispatcher MappingEvents;
 
+		private readonly DTE2 _dte;
 		private readonly SolutionChangeListener _solutionChangeListener;
 
 		public Services(DTE2 dte, ProjectColoredFramePackage package)
 		{
-			SettingsChangedEventDispatcher = new SettingsChangedEventDispatcher();
+			MappingEvents = new MappingEventsDispatcher();
 
 			_solutionChangeListener = new SolutionChangeListener(dte);
 			_solutionChangeListener.MappingBecameDirty += (s, e) => Remap(package);
+
+            MappingEvents.OptionsChanged += (s, e) => RemapSilently(package);
 
 			_dte = dte;
 			Remap(package);
@@ -31,8 +34,11 @@ namespace ProjectColoredFrame.Core
 		public ColorDecider Mapping { get; private set; }
 
 		private void Remap(ProjectColoredFramePackage package)
-		{
-			Mapping = ColorDecider.Create(_dte.Solution, package.OptionsGrid);
-		}
-	}
+        {
+            RemapSilently(package);
+            MappingEvents.RaiseMappingChanged(Mapping);
+        }
+
+        private void RemapSilently(ProjectColoredFramePackage package) => Mapping = ColorDecider.Create(_dte.Solution, package.OptionsGrid);
+    }
 }

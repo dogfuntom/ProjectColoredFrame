@@ -5,6 +5,7 @@ namespace ProjectColoredFrame
     using System.ComponentModel.Composition;
     using Microsoft.VisualStudio.Text.Editor;
     using Microsoft.VisualStudio.Utilities;
+    using System;
 
     /// <summary>
     /// Export a <see cref="IWpfTextViewMarginProvider"/>, which returns an instance of the margin for the editor to use.
@@ -63,17 +64,25 @@ namespace ProjectColoredFrame
     internal sealed class FrameMarginFactoryLeft : IWpfTextViewMarginProvider
     {
         /// <summary>
-        /// Creates an <see cref="IWpfTextViewMargin"/> for the given <see cref="IWpfTextViewHost"/>.
+        /// Creates an <see cref = "IWpfTextViewMargin"/> for the given <see cref = "IWpfTextViewHost"/>.
         /// </summary>
-        /// <param name="wpfTextViewHost">The <see cref="IWpfTextViewHost"/> for which to create the <see cref="IWpfTextViewMargin"/>.</param>
-        /// <param name="marginContainer">The margin that will contain the newly-created margin.</param>
-        /// <returns>The <see cref="IWpfTextViewMargin"/>.
-        /// The value may be null if this <see cref="IWpfTextViewMarginProvider"/> does not participate for this context.
+        /// <param name = "wpfTextViewHost">The <see cref = "IWpfTextViewHost"/> for which to create the <see cref = "IWpfTextViewMargin"/>.</param>
+        /// <param name = "marginContainer">The margin that will contain the newly-created margin.</param>
+        /// <returns>The <see cref = "IWpfTextViewMargin"/>.
+        /// The value may be null if this <see cref = "IWpfTextViewMarginProvider"/> does not participate for this context.
         /// </returns>
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
         {
-            var height = wpfTextViewHost.HostControl.Height;
-            return new FrameMargin(wpfTextViewHost.TextView, vertical: true);
+            try
+            {
+                var height = wpfTextViewHost.HostControl.Height;
+                return new FrameMargin(wpfTextViewHost.TextView, vertical: true);
+            }
+            catch (Exception e)
+            {
+                ErrorNotificationLogger.LogErrorWithoutShowingErrorNotificationUI(e.Message, e);
+                return null;
+            }
         }
     }
 

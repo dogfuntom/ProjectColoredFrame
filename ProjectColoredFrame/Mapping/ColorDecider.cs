@@ -39,7 +39,9 @@ namespace ProjectColoredFrame.Mapping
 
 		public Color GetColorOf(string fileName)
 		{
-			if (string.IsNullOrWhiteSpace(fileName))
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (string.IsNullOrWhiteSpace(fileName))
 				return Colors.Transparent;
 
 			var project = (Package.GetGlobalService(typeof(DTE)) as DTE2)?.Solution?.FindProjectItem(fileName)?.ContainingProject;
@@ -57,7 +59,9 @@ namespace ProjectColoredFrame.Mapping
 
 		private Color GetColorOf(Project project)
 		{
-			if (project == null)
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (project == null)
 				return Colors.Transparent;
 
 			foreach (var custom in _customMappings)

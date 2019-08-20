@@ -27,7 +27,8 @@ namespace ProjectColoredFrame.Mapping
 		// so no benefit in cluttering up the codebase by having them outside of it.
 		public static ColorDecider Create(Solution solution, ProjectColoredFrameOptionsGrid options)
 		{
-			IReadOnlyList<Color> loadPalette()
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            IReadOnlyList<Color> loadPalette()
 			{
 				var replace = options.ReplaceDefaultPalette;
 				System.Drawing.Color[] customPalette = options.CustomColors;
@@ -72,7 +73,8 @@ namespace ProjectColoredFrame.Mapping
 		[Conditional("DEBUG")]
 		private void DebugLogMapping(Solution solution)
 		{
-			Debug.Indent();
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            Debug.Indent();
 			foreach (Project project in solution)
 			{
 				Debug.Write(project.Name);
