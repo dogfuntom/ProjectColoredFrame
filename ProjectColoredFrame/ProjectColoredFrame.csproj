@@ -59,7 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\SolutionChangeListener.cs" />
-    <Compile Include="Margin\ErrorNotificationLogger.cs" />
+    <Compile Include="Core\ErrorNotificationLogger.cs" />
     <Compile Include="Margin\FrameMargin.Boilerplate.cs" />
     <Compile Include="Margin\FrameMarginSubscriptions.cs" />
     <Compile Include="Settings\CustomMapping.cs" />

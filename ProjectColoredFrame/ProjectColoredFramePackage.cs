@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ProjectColoredFrame.Core;
 using System;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,11 +37,27 @@ namespace ProjectColoredFrame
             // initialization is the Initialize method.
         }
 
+        internal static ProjectColoredFramePackage CurrentUncertain { get; private set; }
+
         internal static Task<ProjectColoredFramePackage> GetCurrentAsync() => s_current.Task;
 
         internal ProjectColoredFrameOptionsGrid OptionsGrid => (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
 
         internal Services Services { get; private set; }
+
+        internal async Task<bool> TryWriteToActivityLogAsync(__ACTIVITYLOG_ENTRYTYPE kind, string text)
+        {
+            await JoinableTaskFactory.SwitchToMainThreadAsync(DisposalToken);
+
+            // "You should obtain the activity log just before writing to it. Do not cache or save the activity log for future use."
+            // See: https://docs.microsoft.com/en-us/visualstudio/extensibility/how-to-use-the-activity-log?view=vs-2017
+            var log = await GetServiceAsync(typeof(SVsActivityLog)) as IVsActivityLog;
+            if (log == null)
+                return false;
+
+            log.LogEntry((uint)kind, ToString(), text);
+            return true;
+        }
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -55,14 +72,29 @@ namespace ProjectColoredFrame
             // Otherwise, remove the switch to the UI thread if you don't need it.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            if (cancellationToken.IsCancellationRequested)
+            try
             {
-                s_current.SetCanceled();
-                return;
-            }
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    s_current.SetCanceled();
+                    return;
+                }
 
-            Services = new Services((DTE2)await GetServiceAsync(typeof(DTE)), this);
-            s_current.SetResult(this);
+                Services = new Services((DTE2)await GetServiceAsync(typeof(DTE)), this);
+
+                s_current.SetResult(this);
+                CurrentUncertain = this;
+            }
+            catch (ObjectDisposedException)
+            {
+                await TryWriteToActivityLogAsync(__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
+                    "ProjectColoredFrame attempted to initialize but it already either was initialized or failed to initialize.");
+            }
+            catch (InvalidOperationException)
+            {
+                await TryWriteToActivityLogAsync(__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
+                    "ProjectColoredFrame attempted to initialize but it already either was initialized or failed to initialize.");
+            }
         }
     }
 }

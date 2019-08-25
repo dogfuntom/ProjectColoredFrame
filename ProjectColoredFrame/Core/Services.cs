@@ -33,6 +33,7 @@ namespace ProjectColoredFrame.Core
 
 		public ColorDecider Mapping { get; private set; }
 
+        // TODO: It's weird that Services handles remap on relevant events, clearly breaks SRP.
 		private void Remap(ProjectColoredFramePackage package)
         {
             RemapSilently(package);
