@@ -39,8 +39,15 @@ namespace ProjectColoredFrame
 
         internal static ProjectColoredFramePackage CurrentUncertain { get; private set; }
 
+        /// <summary>
+        /// Wait for (already happening) initialization and get this extension's package.
+        /// </summary>
         internal static Task<ProjectColoredFramePackage> GetCurrentAsync() => s_current.Task;
 
+        /// <summary>
+        /// Options are cached but have to be created if not in cache.
+        /// Technically, it's UI API (Windows Forms), even if not shown, so probably switches to UI thread.
+        /// </summary>
         internal ProjectColoredFrameOptionsGrid OptionsGrid => (ProjectColoredFrameOptionsGrid)GetDialogPage(typeof(ProjectColoredFrameOptionsGrid));
 
         internal Services Services { get; private set; }

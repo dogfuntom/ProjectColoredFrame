@@ -21,6 +21,9 @@ namespace ProjectColoredFrame
 
         private static DTE2 DTE => (DTE2)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
 
+        /// <summary>
+        /// Wait for (already happening) initialization and get this extension's package.
+        /// </summary>
         public static Task<ProjectColoredFramePackage> GetPackageAsync() => ProjectColoredFramePackage.GetCurrentAsync();
 
         public static Properties Properties => DTE.Properties[Name, OptionsPageName];

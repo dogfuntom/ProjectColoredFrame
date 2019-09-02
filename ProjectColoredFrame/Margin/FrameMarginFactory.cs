@@ -35,7 +35,7 @@ namespace ProjectColoredFrame
     /// </summary>
     [Export(typeof(IWpfTextViewMarginProvider))]
     [Name(FrameMargin.MarginName + "Top")]
-    [MarginContainer(PredefinedMarginNames.Top)]             // Set the container to the bottom of the editor window
+    [MarginContainer(PredefinedMarginNames.Top)]
     [ContentType("text")]                                       // Show this margin for all text-based types
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryTop : IWpfTextViewMarginProvider
@@ -58,7 +58,7 @@ namespace ProjectColoredFrame
     [Export(typeof(IWpfTextViewMarginProvider))]
     [Name(FrameMargin.MarginName + "Left")]
     [Order(Before = PredefinedMarginNames.LineNumber)]
-    [MarginContainer(PredefinedMarginNames.Left)]             // Set the container to the bottom of the editor window
+    [MarginContainer(PredefinedMarginNames.Left)]
     [ContentType("text")]                                       // Show this margin for all text-based types
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryLeft : IWpfTextViewMarginProvider
@@ -92,7 +92,7 @@ namespace ProjectColoredFrame
     [Export(typeof(IWpfTextViewMarginProvider))]
     [Name(FrameMargin.MarginName + "Right")]
     [Order(After = PredefinedMarginNames.VerticalScrollBar)]  // Ensure that the margin occurs below the horizontal scrollbar
-    [MarginContainer(PredefinedMarginNames.Right)]             // Set the container to the bottom of the editor window
+    [MarginContainer(PredefinedMarginNames.Right)]
     [ContentType("text")]                                       // Show this margin for all text-based types
     [TextViewRole(PredefinedTextViewRoles.Editable)]
     internal sealed class FrameMarginFactoryRight : IWpfTextViewMarginProvider

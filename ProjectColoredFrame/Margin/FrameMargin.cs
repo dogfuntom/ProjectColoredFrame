@@ -43,7 +43,7 @@ namespace ProjectColoredFrame
             void updateHorizontalHeight(object sender, EventArgs e) { Height = textView.ViewportHeight * (textView.ZoomLevel / 100); }
 
             var props = new FrameMarginProperties(filePath);
-            await UpdateEverythingAsync(props);
+            await UpdateAllVisualsAsync(props);
 
             ClipToBounds = true;
 
@@ -58,13 +58,13 @@ namespace ProjectColoredFrame
 
         private EventHandler CreateHandlerForUpdateEverything(FrameMarginProperties props)
         {
-            // Have to use async void because it's an event handler.
+            // Have to use void because it's an event handler.
             async void handleUpdateEverything()
             {
                 // Just in case.
                 await _initialization;
 
-                await UpdateEverythingAsync(props);
+                await UpdateAllVisualsAsync(props);
                 // If something goes wrong here, the only risk is it can become stuck with True forever. Not critical.
                 _isUpdating = false;
             }
@@ -91,18 +91,7 @@ namespace ProjectColoredFrame
             return wrappedHandler;
         }
 
-        //// Have to use async void because it's an event handler.
-        //private async void HandleUpdateEverything(FrameMarginProperties props)
-        //{
-        //    // Just in case.
-        //    await _initialization;
-
-        //    await UpdateEverythingAsync(props);
-        //    // If something goes wrong here, the only risk is it can become stuck with True forever. Not critical.
-        //    _isUpdating = false;
-        //}
-
-        private async Task UpdateEverythingAsync(FrameMarginProperties props)
+        private async Task UpdateAllVisualsAsync(FrameMarginProperties props)
         {
             await props.UpdateAsync();
 
