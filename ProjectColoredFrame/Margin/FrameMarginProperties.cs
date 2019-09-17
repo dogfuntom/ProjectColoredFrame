@@ -35,7 +35,7 @@ namespace ProjectColoredFrame
             var package = await Global.GetPackageAsync();
 
             var services = package.Services;
-            var options = package.OptionsGrid;
+            var options = package.Settings;
 
             Opacity = options.Opacity;
             Thickness = options.Thickness;

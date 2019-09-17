@@ -5,7 +5,7 @@ using System.Drawing;
 namespace ProjectColoredFrame
 {
 	/// <summary>
-	/// DTO struct to be used in <see cref="ProjectColoredFrameOptionsGrid"/> only.
+	/// DTO struct to be used in <see cref="ProjectColoredFrameOptionGrid"/> only.
 	/// </summary>
 	public struct CustomMapping : ICustomMapping
 	{

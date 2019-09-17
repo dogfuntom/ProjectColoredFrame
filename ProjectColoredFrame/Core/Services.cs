@@ -2,7 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 using EnvDTE80;
 using ProjectColoredFrame.Mapping;
-using System;
 
 namespace ProjectColoredFrame.Core
 {
@@ -40,6 +39,6 @@ namespace ProjectColoredFrame.Core
             MappingEvents.RaiseMappingChanged(Mapping);
         }
 
-        private void RemapSilently(ProjectColoredFramePackage package) => Mapping = ColorDecider.Create(_dte.Solution, package.OptionsGrid);
+        private void RemapSilently(ProjectColoredFramePackage package) => Mapping = ColorDecider.Create(_dte.Solution, package.Settings);
     }
 }

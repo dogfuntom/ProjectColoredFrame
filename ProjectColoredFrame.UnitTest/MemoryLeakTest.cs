@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
+﻿using Microsoft.VisualStudio.Text.Editor;
 using Moq;
-using ProjectColoredFrame;
 using ProjectColoredFrame.Margin;
+using System;
 using Xunit;
 
 namespace ProjectColoredFrame.UnitTest

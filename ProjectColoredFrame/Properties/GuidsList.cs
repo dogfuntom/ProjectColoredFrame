@@ -1,19 +1,12 @@
 ﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-//------------------------------------------------------------------------------
-// <copyright file="ProjectColoredFramePackageGuids.cs" company="Company">
-//         Copyright (c) Company.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
 
 namespace ProjectColoredFrame
 {
-    using System;
-
     /// <summary>
     /// ProjectColoredFramePackage GUID constants.
     /// </summary>
-    internal static class ProjectColoredFramePackageGuids
+    internal static class GuidsList
     {
         /// <summary>
         /// ProjectColoredFramePackage GUID string.

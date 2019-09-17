@@ -3,7 +3,6 @@ using Xunit;
 using ProjectColoredFrame.Margin;
 using Microsoft.VisualStudio.Text.Editor;
 using System;
-using System.Threading.Tasks;
 
 namespace ProjectColoredFrame.UnitTest
 {

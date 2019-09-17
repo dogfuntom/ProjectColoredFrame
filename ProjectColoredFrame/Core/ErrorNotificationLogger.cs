@@ -7,15 +7,17 @@ namespace ProjectColoredFrame
 {
     internal static class ErrorNotificationLogger
     {
-#pragma warning disable VSTHRD100 // Avoid async void methods. Can't help it because this method must be available for code that cannot await.
+#pragma warning disable VSTHRD100 // Avoid async void methods.
+#pragma warning disable VSD0064 // Async methods should return a Task to make them awaitable
+        // Can't help it because this method must be available for code that cannot await.
         public static async void LogErrorWithoutShowingErrorNotificationUI(string message, Exception e)
         {
             // TODO: Try Exceptionless here.
             // (Can't try it together with other features because it's likely to break because adding packages into an extension is finicky.)
-
             _ = await ProjectColoredFramePackage.CurrentUncertain?.TryWriteToActivityLogAsync(__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
                                                                                               message + Environment.NewLine + e);
         }
+#pragma warning restore VSD0064 // Async methods should return a Task to make them awaitable
 #pragma warning restore VSTHRD100 // Avoid async void methods
     }
 }

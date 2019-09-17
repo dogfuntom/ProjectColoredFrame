@@ -70,12 +70,35 @@
     <Rule Id="SA1615" Action="Hidden" />
     <Rule Id="SX1101" Action="Warning" />
     <Rule Id="SX1309" Action="Warning" />
+    <Rule Id="SA1600" Action="None" />
+    <Rule Id="SA1633" Action="None" />
+    <Rule Id="SA1309" Action="None" />
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1208" Action="None" />
+    <Rule Id="SA1300" Action="None" />
+    <Rule Id="SA1124" Action="None" />
+    <Rule Id="SA1201" Action="Hidden" />
+    <Rule Id="SA1503" Action="None" />
+    <Rule Id="SA1623" Action="None" />
   </Rules>
   <Rules AnalyzerId="Text.CSharp.Analyzers" RuleNamespace="Text.CSharp.Analyzers">
     <Rule Id="CA1704" Action="Info" />
   </Rules>
   <Rules AnalyzerId="Wintellect.Analyzers" RuleNamespace="Wintellect.Analyzers">
-    <Rule Id="Wintellect003" Action="Info" />
+    <Rule Id="Wintellect003" Action="None" />
     <Rule Id="Wintellect004" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="CSharpGuidelinesAnalyzer" RuleNamespace="CSharpGuidelinesAnalyzer">
+    <Rule Id="AV2318" Action="Hidden" />
+    <Rule Id="AV1706" Action="None" />
+    <Rule Id="AV1500" Action="None" />
+    <Rule Id="AV1115" Action="Info" />
+  </Rules>
+  <Rules AnalyzerId="VSDiagnostics" RuleNamespace="VSDiagnostics">
+    <Rule Id="VSD0023" Action="None" />
+    <Rule Id="VSD0045" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeQuality.Analyzers" RuleNamespace="Microsoft.CodeQuality.Analyzers">
+    <Rule Id="CA2007" Action="Info" />
   </Rules>
 </RuleSet>
