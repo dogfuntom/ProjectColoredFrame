@@ -9,7 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectColoredFrame.VisualT
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{674C9182-7630-4FCB-90EA-C06B51D9F71F}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectColoredFrame.UnitTest", "ProjectColoredFrame.UnitTest\ProjectColoredFrame.UnitTest.csproj", "{9B146A6D-CC40-4B58-8D71-5554DAAFAD9C}"
