@@ -17,7 +17,7 @@ namespace ProjectColoredFrame.Settings
     /// </summary>
     internal static class OptionsStatic
     {
-		public const string CollectionName = Global.Name;
+		public const string CollectionName = Global.OptionCategoryName;
 		public const string FullCollectionName = CollectionName;
 
 		public const string CustomPalettePropertyName = "CustomColors";

@@ -13,13 +13,11 @@ namespace ProjectColoredFrame
     /// </summary>
     internal static class Global
     {
-#pragma warning disable CC0021 // Use nameof. It's used in persistence, better not change it ever, but name-space can be renamed freely.
-        public const string Name = "ProjectColoredFrame";
-#pragma warning restore CC0021 // Use nameof
+        public const string OptionCategoryName = "ProjectColoredFrame";
         public const string GeneralOptionsName = "General";
         public const string CustomPaletteOptionsName = "Custom Colors";
 
-        private static DTE2 Dte => (DTE2)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
+        //private static DTE2 Dte => (DTE2)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(DTE));
 
         /// <summary>
         /// Wait for (already happening) initialization and get this extension's package.

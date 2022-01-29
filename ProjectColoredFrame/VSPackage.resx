@@ -126,8 +126,8 @@
     <comment>options: name of page itself</comment>
   </data>
   <data name="108" xml:space="preserve">
-    <value>ProjectColoredFrame settings</value>
-    <comment>options: description</comment>
+    <value>ProjectColoredFrame's settings</value>
+    <comment>options: description of category</comment>
   </data>
   <data name="109" xml:space="preserve">
     <value>Custom Colors</value>

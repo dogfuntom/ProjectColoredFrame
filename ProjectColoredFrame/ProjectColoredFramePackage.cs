@@ -19,10 +19,9 @@ namespace ProjectColoredFrame
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects, PackageAutoLoadFlags.BackgroundLoad)]
-    [ProvideOptionPage(typeof(ProjectColoredFrameOptionGrid), Global.Name, Global.GeneralOptionsName, 106, 107, true)]
-    [ProvideOptionPage(typeof(CustomPaletteOptionPage), Global.Name, Global.CustomPaletteOptionsName, 106, 109, true)]
-    [ProvideProfile(typeof(ProjectColoredFrameOptionGrid),
-        Global.Name, Global.CustomPaletteOptionsName, 106, 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
+    [ProvideOptionPage(typeof(ProjectColoredFrameOptionGrid), Global.OptionCategoryName, Global.GeneralOptionsName, categoryResourceID: 106, pageNameResourceID: 107, supportsAutomation: true)]
+    [ProvideOptionPage(typeof(CustomPaletteOptionPage), Global.OptionCategoryName, Global.CustomPaletteOptionsName, categoryResourceID: 106, pageNameResourceID: 109, supportsAutomation: true)]
+    [ProvideProfile(typeof(ProjectColoredFrameOptionGrid), Global.OptionCategoryName, Global.CustomPaletteOptionsName, categoryResourceID: 106, objectNameResourceID: 107, isToolsOptionPage: true, DescriptionResourceID = 108)]
     public sealed class ProjectColoredFramePackage : AsyncPackage
     {
         private static readonly TaskCompletionSource<ProjectColoredFramePackage> s_current = new TaskCompletionSource<ProjectColoredFramePackage>();
@@ -61,7 +60,7 @@ namespace ProjectColoredFrame
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync(DisposalToken);
 
-            // "You should obtain the activity log just before writing to it. Do not cache or save the activity log for future use."
+            // Reminder: "You should obtain the activity log just before writing to it. Do not cache or save the activity log for future use."
             // See: https://docs.microsoft.com/en-us/visualstudio/extensibility/how-to-use-the-activity-log?view=vs-2017
             var log = await GetServiceAsync(typeof(SVsActivityLog)) as IVsActivityLog;
             if (log == null)
@@ -110,3 +109,13 @@ namespace ProjectColoredFrame
         }
     }
 }
+
+/*
+Cheat sheet:
+- [ProvideOptionsPage] makes the Options page show up in the Tools > Options dialog.
+- [ProvideProfile] registers the options on the roaming profile.
+- The numbers passed to [InstalledProductRegistration], and to the two attributes above, come from VSPackage.resx.
+
+Sources:
+- https://docs.microsoft.com/en-us/visualstudio/extensibility/vsix/recipes/settings-options
+ */
